@@ -25,10 +25,14 @@ const isUUID = (str: string) =>
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str);
 
 export async function fetchProductsFromSupabase(): Promise<Product[] | null> {
-  if (!isSupabaseConfigured) return PRODUCTS;
+  if (!isSupabaseConfigured) {
+    console.warn('[OUTSIX Supabase] NEXT_PUBLIC_SUPABASE_URL or ANON_KEY missing on environment');
+    return PRODUCTS;
+  }
 
   const { data, error } = await supabaseFetch<DbProductRecord[]>('/rest/v1/products?select=*&order=created_at.desc');
   if (error || !data) {
+    console.error('[OUTSIX Supabase] Failed to fetch products from Supabase:', error);
     return PRODUCTS;
   }
 
