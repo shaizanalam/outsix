@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { X, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUIStore } from '@/store/ui';
+import logoImg from '../../../logo.jpeg';
 
 const MENU_SECTIONS = [
   {

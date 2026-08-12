@@ -8,6 +8,8 @@ import { useCartStore } from '@/store/cart';
 import { useWishlistStore } from '@/store/wishlist';
 import { useUIStore } from '@/store/ui';
 
+import logoImg from '../../../logo.jpeg';
+
 const NAV_LINKS = [
   { href: '/shop', label: 'SHOP' },
   { href: '/collections', label: 'COLLECTIONS' },
@@ -64,16 +66,27 @@ export function Header() {
         {/* LOGO */}
         <Link
           href="/"
-          className="font-display"
+          aria-label="OUTSIX Home"
           style={{
-            fontSize: '22px',
-            letterSpacing: '0.12em',
-            color: 'var(--text-primary)',
+            display: 'inline-flex',
+            alignItems: 'center',
+            height: scrolled ? '36px' : '44px',
             textDecoration: 'none',
             flexShrink: 0,
+            transition: 'height var(--transition-base)',
           }}
         >
-          OUTSIX
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={logoImg.src}
+            alt="OUTSIX"
+            style={{
+              height: '100%',
+              width: 'auto',
+              objectFit: 'contain',
+              mixBlendMode: 'screen',
+            }}
+          />
         </Link>
 
         {/* DESKTOP NAV */}
