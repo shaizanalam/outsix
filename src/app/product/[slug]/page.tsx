@@ -16,11 +16,16 @@ import { useProductStore } from '@/store/products';
 export default function ProductPage() {
   const routeParams = useParams();
   const slug = typeof routeParams?.slug === 'string' ? routeParams.slug : Array.isArray(routeParams?.slug) ? routeParams.slug[0] : '';
+  const { loadProducts } = useProductStore();
   const isLoaded = useProductStore((s) => s.isLoaded);
   const storeProducts = useProductStore((s) => s.products);
   const product = storeProducts.find((p) => p.slug === slug || p.id === slug) || getProductBySlug(slug);
 
   const { addToRecentlyViewed } = useUIStore();
+
+  useEffect(() => {
+    loadProducts();
+  }, [loadProducts]);
 
   useEffect(() => {
     if (product) {
