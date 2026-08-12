@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Heart, Plus, Check } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useCartStore } from '@/store/cart';
 import { useWishlistStore } from '@/store/wishlist';
 import { useUIStore } from '@/store/ui';
@@ -27,7 +27,15 @@ export function ProductCard({ product }: Props) {
   const soldOut = product.availableSizes.length === 0;
   const lowStock = !soldOut && product.stock <= 10;
 
-  const handleQuickAdd = (size: ProductSize) => {
+  const discountPercent = product.compareAtPrice
+    ? Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)
+    : null;
+
+  const handleQuickAdd = (size: ProductSize, e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     addItem(product, size);
     setAddedSize(size);
     setQuickAddOpen(false);
@@ -49,236 +57,152 @@ export function ProductCard({ product }: Props) {
 
   return (
     <article
-      style={{ position: 'relative' }}
+      className="group relative flex flex-col bg-[var(--surface)] border border-[var(--border)] overflow-hidden transition-all duration-300 hover:border-[var(--border-strong)]"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => { setHovered(false); setQuickAddOpen(false); }}
       data-cursor="view"
     >
-      {/* IMAGE */}
-      <Link href={`/product/${product.slug}`} style={{ display: 'block', textDecoration: 'none' }}>
-        <div
-          style={{
-            position: 'relative',
-            aspectRatio: '3/4',
-            backgroundColor: 'var(--surface-elevated)',
-            overflow: 'hidden',
-          }}
-        >
-          {/* REAL SHIRT IMAGE (ed2.jpeg / eg1.jpeg) */}
-          <div
-            style={{
-              width: '100%',
-              height: '100%',
-              position: 'relative',
-              transition: 'transform var(--transition-slow)',
-              transform: hovered ? 'scale(1.05)' : 'scale(1)',
-            }}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={hovered && product.images[1] ? product.images[1] : product.images[0] || '/ed2.jpeg'}
-              alt={product.name}
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                objectPosition: 'center',
-              }}
-            />
-          </div>
+      {/* TOP IMAGE AREA */}
+      <Link href={`/product/${product.slug}`} className="block relative w-full aspect-[3/4] bg-[#0A0A0A] overflow-hidden no-underline">
+        {/* SHIRT IMAGE */}
+        <div className="w-full h-full relative transition-transform duration-500 ease-out group-hover:scale-105">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={hovered && product.images[1] ? product.images[1] : product.images[0] || '/ed2.jpeg'}
+            alt={product.name}
+            className="w-full h-full object-cover object-center"
+          />
+        </div>
 
-          {/* BADGE */}
+        {/* BADGES (TOP-LEFT) */}
+        <div className="absolute top-2.5 left-2.5 flex flex-col gap-1 z-10">
           {product.badge && !soldOut && (
-            <div
-              style={{
-                position: 'absolute',
-                top: '12px',
-                left: '12px',
-                backgroundColor: product.badge === 'SALE' ? 'var(--destructive)' : 'var(--text-primary)',
-                color: product.badge === 'SALE' ? 'var(--white)' : 'var(--background)',
-                padding: '3px 8px',
-                fontSize: '9px',
-                fontWeight: 700,
-                letterSpacing: '0.12em',
-                fontFamily: 'Barlow Condensed, sans-serif',
-              }}
+            <span
+              className={`px-2 py-0.5 text-[9px] font-bold tracking-widest font-editorial ${
+                product.badge === 'SALE' ? 'bg-[var(--destructive)] text-white' : 'bg-[var(--text-primary)] text-[var(--background)]'
+              }`}
             >
               {product.badge}
-            </div>
+            </span>
           )}
-
-          {/* SOLD OUT OVERLAY */}
-          {soldOut && (
-            <div
-              style={{
-                position: 'absolute',
-                inset: 0,
-                backgroundColor: 'rgba(7,7,7,0.6)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <span
-                className="font-editorial"
-                style={{ fontSize: '11px', color: 'var(--text-secondary)', letterSpacing: '0.14em' }}
-              >
-                SOLD OUT
-              </span>
-            </div>
-          )}
-
-          {/* WISHLIST */}
-          <button
-            onClick={handleWishlist}
-            aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
-            className="opacity-100 md:opacity-0 md:group-hover:opacity-100"
-            style={{
-              position: 'absolute',
-              top: '10px',
-              right: '10px',
-              background: 'rgba(0,0,0,0.4)',
-              backdropFilter: 'blur(4px)',
-              border: 'none',
-              cursor: 'pointer',
-              padding: '8px',
-              borderRadius: '50%',
-              transition: 'opacity var(--transition-fast)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              zIndex: 10,
-            }}
-          >
-            <motion.div
-              animate={{ scale: wishlisted ? [1, 1.3, 1] : 1 }}
-              transition={{ duration: 0.25 }}
-            >
-              <Heart
-                size={16}
-                strokeWidth={1.8}
-                fill={wishlisted ? 'var(--text-primary)' : 'none'}
-                color={wishlisted ? 'var(--text-primary)' : 'var(--white)'}
-              />
-            </motion.div>
-          </button>
-
-          {/* QUICK ADD */}
-          <AnimatePresence>
-            {(hovered || quickAddOpen) && !soldOut && (
-              <motion.div
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 8 }}
-                transition={{ duration: 0.18 }}
-                style={{
-                  position: 'absolute',
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  backgroundColor: quickAddOpen ? 'var(--surface-elevated)' : 'rgba(7,7,7,0.9)',
-                  backdropFilter: 'blur(8px)',
-                  padding: '10px 12px',
-                  zIndex: 10,
-                }}
-              >
-                {!quickAddOpen ? (
-                  <button
-                    onClick={handleQuickAddToggle}
-                    data-cursor="add"
-                    style={{
-                      width: '100%',
-                      background: 'none',
-                      border: '1px solid var(--border-strong)',
-                      color: 'var(--text-primary)',
-                      padding: '10px',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '8px',
-                      fontSize: '11px',
-                      letterSpacing: '0.12em',
-                      fontFamily: 'Barlow Condensed, sans-serif',
-                      fontWeight: 700,
-                      transition: 'border-color var(--transition-fast)',
-                    }}
-                  >
-                    {addedSize ? (
-                      <>
-                        <Check size={12} />
-                        ADDED
-                      </>
-                    ) : (
-                      <>
-                        <Plus size={12} />
-                        QUICK ADD
-                      </>
-                    )}
-                  </button>
-                ) : (
-                  <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', justifyContent: 'center' }}>
-                    {product.sizes.map((size) => {
-                      const available = product.availableSizes.includes(size);
-                      return (
-                        <button
-                          key={size}
-                          onClick={() => available && handleQuickAdd(size)}
-                          disabled={!available}
-                          style={{
-                            padding: '8px 12px',
-                            fontSize: '11px',
-                            letterSpacing: '0.08em',
-                            fontFamily: 'Barlow Condensed, sans-serif',
-                            fontWeight: 700,
-                            border: '1px solid',
-                            borderColor: available ? 'var(--border-strong)' : 'var(--border)',
-                            backgroundColor: 'transparent',
-                            color: available ? 'var(--text-primary)' : 'var(--text-muted)',
-                            cursor: available ? 'pointer' : 'not-allowed',
-                            opacity: available ? 1 : 0.4,
-                            minHeight: '36px',
-                            transition: 'border-color var(--transition-fast), background var(--transition-fast)',
-                          }}
-                          onMouseEnter={(e) => available && (e.currentTarget.style.backgroundColor = 'var(--text-primary)', e.currentTarget.style.color = 'var(--background)')}
-                          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = available ? 'var(--text-primary)' : 'var(--text-muted)'; }}
-                        >
-                          {size}
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </Link>
-
-      {/* PRODUCT META */}
-      <div style={{ paddingTop: '12px' }}>
-        <Link href={`/product/${product.slug}`} style={{ textDecoration: 'none' }}>
-          <h3
-            className="font-editorial truncate-1"
-            style={{ fontSize: '12px', color: hovered ? 'var(--text-secondary)' : 'var(--text-primary)', letterSpacing: '0.06em', marginBottom: '4px', transition: 'color var(--transition-fast)' }}
-          >
-            {product.name}
-          </h3>
-        </Link>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontSize: '14px', color: 'var(--text-primary)', fontFamily: 'Inter', fontWeight: 500 }}>
-            ₹{product.price.toLocaleString('en-IN')}
-          </span>
-          {product.compareAtPrice && (
-            <span style={{ fontSize: '12px', color: 'var(--text-muted)', fontFamily: 'Inter', textDecoration: 'line-through' }}>
-              ₹{product.compareAtPrice.toLocaleString('en-IN')}
+          {discountPercent && discountPercent > 0 && !soldOut && (
+            <span className="px-1.5 py-0.5 text-[9px] font-bold tracking-wider bg-[var(--success)] text-white font-editorial">
+              {discountPercent}% OFF
             </span>
           )}
         </div>
-        {lowStock && (
-          <p className="font-editorial" style={{ fontSize: '9px', color: 'var(--warning)', letterSpacing: '0.1em', marginTop: '4px' }}>
-            LOW STOCK
-          </p>
+
+        {/* SOLD OUT OVERLAY */}
+        {soldOut && (
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] flex items-center justify-center z-10">
+            <span className="font-editorial text-xs text-[var(--text-secondary)] tracking-widest bg-black/80 px-3 py-1 border border-[var(--border)]">
+              SOLD OUT
+            </span>
+          </div>
+        )}
+
+        {/* WISHLIST HEART (TOP-RIGHT) */}
+        <button
+          onClick={handleWishlist}
+          aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+          className="absolute top-2.5 right-2.5 p-2 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-white z-10 flex items-center justify-center transition-transform active:scale-90"
+        >
+          <motion.div
+            animate={{ scale: wishlisted ? [1, 1.3, 1] : 1 }}
+            transition={{ duration: 0.25 }}
+          >
+            <Heart
+              size={15}
+              strokeWidth={2}
+              fill={wishlisted ? 'var(--text-primary)' : 'none'}
+              color={wishlisted ? 'var(--text-primary)' : '#ffffff'}
+            />
+          </motion.div>
+        </button>
+      </Link>
+
+      {/* BOTTOM DESCRIPTION & PRICE AREA */}
+      <div className="flex flex-col justify-between flex-1 p-3 sm:p-4 border-t border-[var(--border)]">
+        <div>
+          <div className="flex items-center justify-between gap-1 mb-1">
+            <span className="font-editorial text-[9px] sm:text-[10px] text-[var(--text-muted)] tracking-widest uppercase">
+              OUTSIX · {product.category}
+            </span>
+            {lowStock && (
+              <span className="font-editorial text-[9px] text-[var(--warning)] tracking-wider">
+                FEW LEFT
+              </span>
+            )}
+          </div>
+
+          <Link href={`/product/${product.slug}`} className="no-underline">
+            <h3 className="font-editorial text-xs sm:text-sm text-[var(--text-primary)] tracking-wide line-clamp-1 mb-2 group-hover:text-[var(--text-secondary)] transition-colors">
+              {product.name}
+            </h3>
+          </Link>
+
+          {/* PRICE BLOCK */}
+          <div className="flex items-baseline gap-2 flex-wrap mb-3">
+            <span className="font-sans text-sm sm:text-base font-semibold text-[var(--text-primary)]">
+              ₹{product.price.toLocaleString('en-IN')}
+            </span>
+            {product.compareAtPrice && (
+              <span className="font-sans text-xs text-[var(--text-muted)] line-through">
+                ₹{product.compareAtPrice.toLocaleString('en-IN')}
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* MOBILE & DESKTOP QUICK ACTION BUTTON */}
+        {!soldOut ? (
+          <div>
+            {!quickAddOpen ? (
+              <button
+                onClick={handleQuickAddToggle}
+                className="w-full min-h-[38px] py-2 px-3 bg-transparent border border-[var(--border-strong)] text-[var(--text-primary)] hover:bg-[var(--text-primary)] hover:text-[var(--background)] font-editorial text-xs font-bold tracking-widest flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+              >
+                {addedSize ? (
+                  <>
+                    <Check size={14} />
+                    ADDED
+                  </>
+                ) : (
+                  <>
+                    <Plus size={14} />
+                    ADD TO BAG
+                  </>
+                )}
+              </button>
+            ) : (
+              <div className="flex gap-1.5 flex-wrap justify-center py-1">
+                {product.sizes.map((size) => {
+                  const available = product.availableSizes.includes(size);
+                  return (
+                    <button
+                      key={size}
+                      onClick={(e) => available && handleQuickAdd(size, e)}
+                      disabled={!available}
+                      className={`min-h-[34px] min-w-[34px] px-2 text-xs font-bold font-editorial tracking-wider border transition-colors ${
+                        available
+                          ? 'border-[var(--text-primary)] text-[var(--text-primary)] hover:bg-[var(--text-primary)] hover:text-[var(--background)] cursor-pointer'
+                          : 'border-[var(--border)] text-[var(--text-muted)] opacity-40 cursor-not-allowed'
+                      }`}
+                    >
+                      {size}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        ) : (
+          <button
+            disabled
+            className="w-full min-h-[38px] py-2 px-3 bg-[var(--surface-elevated)] border border-[var(--border)] text-[var(--text-muted)] font-editorial text-xs font-bold tracking-widest text-center opacity-60 cursor-not-allowed"
+          >
+            OUT OF STOCK
+          </button>
         )}
       </div>
     </article>
