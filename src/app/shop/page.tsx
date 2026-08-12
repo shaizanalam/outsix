@@ -5,15 +5,15 @@ import { SlidersHorizontal, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CATEGORIES, type ProductCategory } from '@/data/products';
 import { ProductGrid } from '@/components/product/ProductGrid';
-import { useAdminStore } from '@/store/admin';
+import { useProductStore } from '@/store/products';
 
 type SortOption = 'featured' | 'newest' | 'price-asc' | 'price-desc' | 'best-selling';
 
 export default function ShopPage() {
-  const storeProducts = useAdminStore((s) => s.products);
+  const storeProducts = useProductStore((s) => s.products);
   const [selectedCategories, setSelectedCategories] = useState<ProductCategory[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 2000]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 100000]);
   const [sort, setSort] = useState<SortOption>('featured');
   const [filterOpen, setFilterOpen] = useState(false);
   const [showMobileFilter, setShowMobileFilter] = useState(false);

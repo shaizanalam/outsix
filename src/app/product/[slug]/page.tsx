@@ -11,11 +11,13 @@ import { useUIStore } from '@/store/ui';
 import { getProductBySlug, getRelatedProducts } from '@/data/products';
 import type { Product, ProductSize } from '@/data/products';
 import { ProductCard } from '@/components/product/ProductCard';
+import { useProductStore } from '@/store/products';
 
 export default function ProductPage() {
   const routeParams = useParams();
   const slug = typeof routeParams?.slug === 'string' ? routeParams.slug : Array.isArray(routeParams?.slug) ? routeParams.slug[0] : '';
-  const product = getProductBySlug(slug);
+  const storeProducts = useProductStore((s) => s.products);
+  const product = storeProducts.find((p) => p.slug === slug || p.id === slug) || getProductBySlug(slug);
   if (!product) notFound();
 
   const related = getRelatedProducts(product, 4);

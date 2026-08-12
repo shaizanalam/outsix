@@ -7,10 +7,10 @@ import { useRef, useState } from 'react';
 import { AnnouncementTicker } from '@/components/layout/AnnouncementTicker';
 import { ProductGrid } from '@/components/product/ProductGrid';
 import { PRODUCTS, COLLECTIONS } from '@/data/products';
-import { useAdminStore } from '@/store/admin';
+import { useProductStore } from '@/store/products';
 
 export default function HomePage() {
-  const storeProducts = useAdminStore((s) => s.products);
+  const storeProducts = useProductStore((s) => s.products);
   const productsList = storeProducts && storeProducts.length > 0 ? storeProducts : PRODUCTS;
 
   const newDropProducts = productsList.filter((p) => p.collection === 'drop-01' || p.category === 'TEES').slice(0, 6);
