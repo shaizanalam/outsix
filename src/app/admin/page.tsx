@@ -203,7 +203,7 @@ export default function AdminPage() {
                   onDelete={() => {
                     if (confirm(`Delete ${product.name}?`)) {
                       deleteProduct(product.id);
-                      addToast(`Deleted ${product.name}`, 'warning');
+                      addToast(`Deleted ${product.name}`, 'info');
                     }
                   }}
                 />
