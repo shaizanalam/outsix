@@ -34,8 +34,11 @@ export function AccountLinks() {
 
   useEffect(() => {
     getCurrentUserSession().then((session) => {
-      if (session?.user) {
-        setSessionUser(session.user);
+      if (session?.user?.email) {
+        setSessionUser({
+          email: session.user.email,
+          user_metadata: session.user.user_metadata,
+        });
       }
       setLoading(false);
     });
@@ -49,16 +52,22 @@ export function AccountLinks() {
       const { user, error } = await signInWithEmail(email, password);
       if (error) {
         addToast(error.message || 'Login failed', 'error');
-      } else {
-        setSessionUser(user);
-        addToast(`Welcome back, ${user?.email}!`, 'success');
+      } else if (user && user.email) {
+        setSessionUser({
+          email: user.email,
+          user_metadata: user.user_metadata,
+        });
+        addToast(`Welcome back, ${user.email}!`, 'success');
       }
     } else {
       const { user, error } = await signUpWithEmail(email, password, fullName);
       if (error) {
         addToast(error.message || 'Sign up failed', 'error');
-      } else {
-        setSessionUser(user);
+      } else if (user && user.email) {
+        setSessionUser({
+          email: user.email,
+          user_metadata: user.user_metadata,
+        });
         addToast('Account created successfully!', 'success');
       }
     }
