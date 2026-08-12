@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { ExternalLink, Plus, Search, Trash2, X, Upload } from 'lucide-react';
 import { useAdminStore, type AdminOrder } from '@/store/admin';
 import { useProductStore } from '@/store/products';
 import type { Product, ProductCategory, ProductSize } from '@/data/products';
