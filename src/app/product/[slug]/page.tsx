@@ -91,10 +91,10 @@ function ProductGallery({ product }: { product: Product }) {
 
   return (
     <div style={{ position: 'sticky', top: '80px' }}>
-      <div style={{ display: 'flex', gap: '12px' }}>
+      <div className="flex flex-col md:flex-row gap-3">
         {/* THUMBNAILS */}
         {product.images.length > 1 && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '72px', flexShrink: 0 }}>
+          <div className="flex flex-row md:flex-col gap-2 overflow-x-auto w-full md:w-[72px] shrink-0 order-2 md:order-1">
             {product.images.map((img, i) => (
               <button
                 key={i}
@@ -112,6 +112,7 @@ function ProductGallery({ product }: { product: Product }) {
                   justifyContent: 'center',
                   transition: 'border-color var(--transition-fast)',
                   overflow: 'hidden',
+                  flexShrink: 0,
                 }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -123,7 +124,7 @@ function ProductGallery({ product }: { product: Product }) {
 
         {/* MAIN IMAGE */}
         <div
-          style={{ flex: 1 }}
+          className="flex-1 order-1 md:order-2"
           data-cursor="view"
         >
           <div
