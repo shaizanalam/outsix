@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { LOGO_BASE64 } from './LogoData';
 
 type LogoProps = {
   height?: number;
@@ -9,6 +10,9 @@ type LogoProps = {
 };
 
 export function Logo({ height = 36, className = '', onClick }: LogoProps) {
+  // Use embedded Base64 image data first so Vercel CDN never requires an external file
+  const logoSource = LOGO_BASE64 || '/logo.jpeg';
+
   return (
     <Link
       href="/"
@@ -19,10 +23,10 @@ export function Logo({ height = 36, className = '', onClick }: LogoProps) {
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/logo.jpeg"
+        src={logoSource}
         alt="OUTSIX"
         onError={(e) => {
-          // Robust fallback if image isn't found
+          // Fallback if image fails
           const target = e.currentTarget as HTMLElement;
           target.style.display = 'none';
           const fallback = target.nextElementSibling as HTMLElement;
@@ -35,7 +39,7 @@ export function Logo({ height = 36, className = '', onClick }: LogoProps) {
           mixBlendMode: 'screen',
         }}
       />
-      {/* FALLBACK BRANDING IF LOGO FILE IS MISSING */}
+      {/* FALLBACK BRANDING */}
       <span
         style={{
           display: 'none',

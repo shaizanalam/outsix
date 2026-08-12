@@ -9,6 +9,13 @@ try {
   
   if (fs.existsSync(path.join(root, 'logo.jpeg'))) {
     fs.copyFileSync(path.join(root, 'logo.jpeg'), path.join(pub, 'logo.jpeg'));
+    try {
+      const b64 = fs.readFileSync(path.join(root, 'logo.jpeg')).toString('base64');
+      const tsContent = `export const LOGO_BASE64 = "data:image/jpeg;base64,${b64}";\n`;
+      fs.writeFileSync(path.join(root, 'src', 'components', 'ui', 'LogoData.ts'), tsContent);
+    } catch (err) {
+      // ignore
+    }
   }
   if (fs.existsSync(path.join(root, 'ed2.jpeg'))) {
     fs.copyFileSync(path.join(root, 'ed2.jpeg'), path.join(pub, 'ed2.jpeg'));
