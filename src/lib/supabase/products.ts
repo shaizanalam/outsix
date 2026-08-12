@@ -73,7 +73,7 @@ export async function updateProductPriceInSupabase(productId: string, price: num
 
 export async function createProductInSupabase(product: Omit<Product, 'id'>) {
   if (!isSupabaseConfigured) return null;
-  const { data } = await supabaseFetch('/rest/v1/products', {
+  const { data } = await supabaseFetch<DbProductRecord>('/rest/v1/products', {
     method: 'POST',
     headers: { Prefer: 'return=representation' },
     body: JSON.stringify({

@@ -1,11 +1,22 @@
 import { supabaseFetch, isSupabaseConfigured } from './client';
 
+type AuthResponse = {
+  user?: {
+    id?: string;
+    email?: string;
+    user_metadata?: {
+      full_name?: string;
+    };
+  };
+  access_token?: string;
+};
+
 export async function signUpWithEmail(email: string, password: string, fullName: string) {
   if (!isSupabaseConfigured) {
     return { user: { id: `mock-${Date.now()}`, email, user_metadata: { full_name: fullName } }, error: null };
   }
 
-  const { data, error } = await supabaseFetch('/auth/v1/signup', {
+  const { data, error } = await supabaseFetch<AuthResponse>('/auth/v1/signup', {
     method: 'POST',
     body: JSON.stringify({
       email,
@@ -14,7 +25,7 @@ export async function signUpWithEmail(email: string, password: string, fullName:
     }),
   });
 
-  if (error) {
+  if (error || !data) {
     return { user: null, error: { message: typeof error === 'string' ? error : 'Signup failed' } };
   }
 
@@ -26,7 +37,7 @@ export async function signInWithEmail(email: string, password: string) {
     return { user: { id: `mock-${Date.now()}`, email, user_metadata: { full_name: 'OUTSIX Member' } }, error: null };
   }
 
-  const { data, error } = await supabaseFetch('/auth/v1/token?grant_type=password', {
+  const { data, error } = await supabaseFetch<AuthResponse>('/auth/v1/token?grant_type=password', {
     method: 'POST',
     body: JSON.stringify({
       email,
@@ -34,11 +45,11 @@ export async function signInWithEmail(email: string, password: string) {
     }),
   });
 
-  if (error) {
+  if (error || !data) {
     return { user: null, error: { message: typeof error === 'string' ? error : 'Invalid credentials' } };
   }
 
-  if (data?.access_token) {
+  if (data.access_token) {
     if (typeof window !== 'undefined') {
       localStorage.setItem('outsix_supabase_token', data.access_token);
       localStorage.setItem('outsix_user_email', data.user?.email || email);
