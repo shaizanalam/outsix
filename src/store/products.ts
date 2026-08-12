@@ -47,20 +47,23 @@ export const useProductStore = create<ProductState>()(
           images: newProd.images && newProd.images.length > 0 ? newProd.images : ['/bgrem1.png'],
         };
 
-        // 1. Update Zustand local state immediately for 0ms delay
+        // 1. Update local state immediately for 0ms UI delay
         set((state) => ({
-          products: [productWithId, ...state.products.filter((p) => p.id !== id)],
+          products: [productWithId, ...state.products.filter((p) => p.id !== id && p.slug !== id)],
         }));
 
         // 2. Persist to Supabase DB asynchronously
         await createProductInSupabase(newProd);
+
+        // 3. Sync latest DB snapshot
+        get().loadProducts();
       },
 
       updateStock: async (productId, stock) => {
         const newStock = Math.max(0, stock);
         set((state) => ({
           products: state.products.map((p) =>
-            p.id === productId
+            p.id === productId || p.slug === productId
               ? {
                   ...p,
                   stock: newStock,
@@ -74,7 +77,7 @@ export const useProductStore = create<ProductState>()(
 
       updatePrice: async (productId, price) => {
         set((state) => ({
-          products: state.products.map((p) => (p.id === productId ? { ...p, price } : p)),
+          products: state.products.map((p) => (p.id === productId || p.slug === productId ? { ...p, price } : p)),
         }));
         await updateProductPriceInSupabase(productId, price);
       },
@@ -82,7 +85,7 @@ export const useProductStore = create<ProductState>()(
       toggleSizeAvailability: (productId, size) => {
         set((state) => ({
           products: state.products.map((p) => {
-            if (p.id !== productId) return p;
+            if (p.id !== productId && p.slug !== productId) return p;
             const exists = p.availableSizes.includes(size);
             const availableSizes = exists
               ? p.availableSizes.filter((s) => s !== size)
@@ -93,10 +96,16 @@ export const useProductStore = create<ProductState>()(
       },
 
       deleteProduct: async (productId) => {
+        // 1. Delete immediately from local UI state
         set((state) => ({
-          products: state.products.filter((p) => p.id !== productId),
+          products: state.products.filter((p) => p.id !== productId && p.slug !== productId),
         }));
+
+        // 2. Delete from Supabase PostgreSQL DB
         await deleteProductFromSupabase(productId);
+
+        // 3. Sync latest DB snapshot
+        get().loadProducts();
       },
 
       restockAllLowStock: (minStock = 25) => {

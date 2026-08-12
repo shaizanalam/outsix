@@ -27,16 +27,10 @@ export default function HomePage() {
       {/* 02 — NEW DROP */}
       <NewDropSection products={newDropProducts} />
 
-      {/* 03 — FEATURED EDITORIAL */}
-      <FeaturedEditorialSection />
-
-      {/* 04 — SHOP BY CATEGORY */}
+      {/* 03 — SHOP BY CATEGORY */}
       <ShopByCategorySection />
 
-      {/* 05 — COLLECTION CAMPAIGNS */}
-      <CollectionCampaignSection />
-
-      {/* 06 — BEST SELLERS */}
+      {/* 04 — BEST SELLERS */}
       <BestSellersSection products={bestSellers} />
 
       {/* 07 — BRAND STATEMENT */}
@@ -429,94 +423,7 @@ function NewDropSection({ products }: { products: typeof PRODUCTS }) {
   );
 }
 
-/* ============================================================
-   03 — FEATURED EDITORIAL
-   ============================================================ */
-function FeaturedEditorialSection() {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
-      style={{
-        backgroundColor: 'var(--surface)',
-        padding: 'clamp(64px, 10vh, 128px) 0',
-        borderTop: '1px solid var(--border)',
-        borderBottom: '1px solid var(--border)',
-      }}
-      aria-label="Featured product"
-      role="region"
-    >
-      <div className="container-outsix">
-        <div
-          className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center"
-        >
-          {/* IMAGE BLOCK */}
-          <div
-            style={{
-              aspectRatio: '4/5',
-              backgroundColor: '#0A0A0A',
-              position: 'relative',
-              overflow: 'hidden',
-              border: '1px solid var(--border-strong)',
-            }}
-            data-cursor="view"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/ed2.jpeg" alt="SHARK MARK TEE" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            <div style={{ position: 'absolute', bottom: '20px', left: '20px', backgroundColor: 'rgba(0,0,0,0.75)', padding: '6px 12px' }}>
-              <span className="font-editorial" style={{ fontSize: '10px', color: 'var(--white)', letterSpacing: '0.12em' }}>SHARK MARK TEE</span>
-            </div>
-          </div>
 
-          {/* EDITORIAL TEXT */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            <p className="font-editorial" style={{ fontSize: '10px', color: 'var(--text-muted)', letterSpacing: '0.16em' }}>
-              FEATURED — DROP 01
-            </p>
-            <h2
-              className="font-display"
-              style={{ fontSize: 'clamp(36px, 5vw, 60px)', lineHeight: 0.95, color: 'var(--text-primary)' }}
-            >
-              THE NEXT<br />UNIFORM.
-            </h2>
-            <p style={{ fontSize: '15px', color: 'var(--text-secondary)', fontFamily: 'Inter', lineHeight: 1.7, maxWidth: '360px' }}>
-              Built for those who move different. The SHARK MARK TEE — our signature piece for Drop 01. 300 GSM heavyweight cotton, screen-printed shark identity.
-            </p>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <span className="font-display" style={{ fontSize: '28px', color: 'var(--text-primary)' }}>₹749</span>
-              <span style={{ fontSize: '14px', color: 'var(--text-muted)', textDecoration: 'line-through', fontFamily: 'Inter' }}>₹899</span>
-            </div>
-            <Link
-              href="/product/shark-mark-tee"
-              data-cursor="shop"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '14px 28px',
-                border: '1px solid var(--text-primary)',
-                color: 'var(--text-primary)',
-                textDecoration: 'none',
-                fontSize: '12px',
-                letterSpacing: '0.12em',
-                fontFamily: 'Barlow Condensed, sans-serif',
-                fontWeight: 700,
-                width: 'fit-content',
-                transition: 'background var(--transition-fast), color var(--transition-fast)',
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--text-primary)'; e.currentTarget.style.color = 'var(--background)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = 'var(--text-primary)'; }}
-            >
-              SHOP NOW <ArrowRight size={14} />
-            </Link>
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
 
 /* ============================================================
    04 — SHOP BY CATEGORY
@@ -597,72 +504,7 @@ function ShopByCategorySection() {
 /* ============================================================
    05 — COLLECTION CAMPAIGNS
    ============================================================ */
-function CollectionCampaignSection() {
-  return (
-    <section style={{ borderTop: '1px solid var(--border)' }} aria-label="Collections">
-      {COLLECTIONS.slice(0, 2).map((col, i) => (
-        <motion.div
-          key={col.id}
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className={`grid grid-cols-1 md:grid-cols-5 min-h-[60vh] border-b border-[var(--border)]`}
-        >
-          {/* IMAGE */}
-          <div
-            className={`relative overflow-hidden min-h-[400px] md:min-h-full ${i % 2 === 0 ? 'md:order-1 md:col-span-3' : 'md:order-2 md:col-span-2'}`}
-            data-cursor="view"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={i % 2 === 0 ? '/eg1.jpeg' : '/ed2.jpeg'} alt={col.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            <div style={{ position: 'absolute', top: '20px', left: '20px', backgroundColor: 'rgba(0,0,0,0.75)', padding: '4px 10px' }}>
-              <span className="font-editorial" style={{ fontSize: '9px', color: 'var(--white)', letterSpacing: '0.14em' }}>{col.season}</span>
-            </div>
-          </div>
 
-          {/* TEXT */}
-          <div
-            className={`flex flex-col justify-end p-8 md:p-16 bg-[var(--surface)] ${i % 2 === 0 ? 'md:order-2 md:col-span-2' : 'md:order-1 md:col-span-3'}`}
-          >
-            <p className="font-editorial" style={{ fontSize: '10px', color: 'var(--text-muted)', letterSpacing: '0.16em', marginBottom: '16px' }}>
-              {col.name}
-            </p>
-            <h2
-              className="font-display"
-              style={{ fontSize: 'clamp(36px, 5vw, 64px)', color: 'var(--text-primary)', lineHeight: 0.95, marginBottom: '20px' }}
-            >
-              {col.subtitle}
-            </h2>
-            <p style={{ fontSize: '14px', color: 'var(--text-secondary)', fontFamily: 'Inter', lineHeight: 1.7, marginBottom: '32px', maxWidth: '300px' }}>
-              {col.description}
-            </p>
-            <Link
-              href={`/collections/${col.slug}`}
-              data-cursor="shop"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                fontSize: '12px',
-                letterSpacing: '0.12em',
-                fontFamily: 'Barlow Condensed, sans-serif',
-                fontWeight: 700,
-                color: 'var(--text-primary)',
-                textDecoration: 'none',
-                transition: 'gap var(--transition-fast)',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.gap = '14px')}
-              onMouseLeave={(e) => (e.currentTarget.style.gap = '8px')}
-            >
-              EXPLORE <ArrowRight size={14} />
-            </Link>
-          </div>
-        </motion.div>
-      ))}
-    </section>
-  );
-}
 
 /* ============================================================
    06 — BEST SELLERS
