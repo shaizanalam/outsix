@@ -211,6 +211,8 @@ export default function BlackHole(props: BlackHoleProps) {
         return () => ro.disconnect()
     }, [])
 
+    const colorsKey = JSON.stringify(colors);
+
     useEffect(() => {
         const canvas = canvasRef.current
         const fgCanvas = fgCanvasRef.current
@@ -231,9 +233,6 @@ export default function BlackHole(props: BlackHoleProps) {
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
             fgCtx.setTransform(dpr, 0, 0, dpr, 0, 0)
 
-            ctx.globalAlpha = 1.0
-            fgCtx.globalAlpha = 1.0
-
             ctx.globalCompositeOperation = "destination-out"
             ctx.fillStyle = `rgba(0, 0, 0, ${trailAlpha})`
             ctx.fillRect(0, 0, w, h)
@@ -244,7 +243,7 @@ export default function BlackHole(props: BlackHoleProps) {
             fgCtx.fillRect(0, 0, w, h)
             fgCtx.globalCompositeOperation = "source-over"
 
-            const outerRad = outerRadFromSize(w, h)
+            const outerRad = outerRadFromSize(w)
             const voidCx = (voidX / 100) * w
             const voidCy = (voidY / 100) * h
 
@@ -266,81 +265,53 @@ export default function BlackHole(props: BlackHoleProps) {
 
             for (let i = 0; i < pts.length; i++) {
                 const pt = pts[i]
-
-                const speedFactor = Math.sqrt(
-                    voidRadius / Math.max(pt.radius, 10)
-                )
-                const localOrbitSpeed =
-                    orbitSpeed * speedFactor * pt.speedOffset
-                const localPullSpeed = pullSpeed * speedFactor * pt.speedOffset
-
-                pt.angle += localOrbitSpeed * 0.012 * dt
-                pt.radius -= localPullSpeed * dt
-
-                if (pt.radius < voidRadius) {
-                    pt.radius =
-                        voidRadius +
-                        0.7 * (outerRad - voidRadius) +
-                        Math.random() * 0.3 * (outerRad - voidRadius)
+                pt.angle += (0.012 * orbitSpeed * dt) / Math.sqrt(pt.radius / 50)
+                pt.radius -= 0.15 * pullSpeed * dt
+                if (pt.radius < voidRadius * 0.4) {
+                    pt.radius = outerRad * (0.8 + Math.random() * 0.2)
                     pt.angle = Math.random() * Math.PI * 2
-                    pt.height = (Math.random() - 0.5) * 16
-                    continue
                 }
 
-                const cosA = Math.cos(pt.angle)
-                const sinA = Math.sin(pt.angle)
+                const px = pt.radius * Math.cos(pt.angle)
+                const py = pt.height
+                const pz = pt.radius * Math.sin(pt.angle)
 
-                const x_base = pt.radius * cosA
-                const y_base = pt.height
-                const z_base = pt.radius * sinA
+                const cosT = Math.cos(tiltRad)
+                const sinT = Math.sin(tiltRad)
+                const y1 = py * cosT - pz * sinT
+                const z1 = py * sinT + pz * cosT
 
-                const x1 = x_base
-                const y1 =
-                    y_base * Math.cos(tiltRad) + z_base * Math.sin(tiltRad)
-                const z1 =
-                    -y_base * Math.sin(tiltRad) + z_base * Math.cos(tiltRad)
+                const cosS = Math.cos(tiltSidewayRad)
+                const sinS = Math.sin(tiltSidewayRad)
+                const x2 = px * cosS + z1 * sinS
+                const z2 = -px * sinS + z1 * cosS
 
-                const x3d =
-                    x1 * Math.cos(tiltSidewayRad) -
-                    y1 * Math.sin(tiltSidewayRad)
-                const y3d =
-                    x1 * Math.sin(tiltSidewayRad) +
-                    y1 * Math.cos(tiltSidewayRad)
-                const z3d = z1
+                const dist = perspective + z2
+                const scale = perspective / Math.max(dist, 10)
+                const screenX = voidCx + x2 * scale
+                const screenY = voidCy + y1 * scale
 
-                const scale = perspective / (perspective + z3d)
-                const px = voidCx + x3d * scale
-                const py = voidCy + y3d * scale
-
-                if (px < -30 || px > w + 30 || py < -30 || py > h + 30) continue
-
-                const size = Math.max(0.3, particleSize * scale)
-
-                const alpha = Math.max(
-                    0.35,
-                    1 - ((z3d + outerRad) / (2 * outerRad)) * 0.45
-                )
-
-                const color = colors[pt.colorIdx % colors.length]
-
-                const projectedPt: ProjectedPt = {
-                    x: px,
-                    y: py,
-                    size,
+                const isForeground = z2 > 0
+                const alpha = Math.max(0, Math.min(1, scale * 0.8))
+                const particleColor = colors[pt.colorIdx % colors.length] || "#ffffff"
+                const item = {
+                    x: screenX,
+                    y: screenY,
+                    size: pt.size * scale,
                     alpha,
-                    z: z3d,
-                    color,
+                    z: z2,
+                    color: particleColor,
                 }
 
-                if (z3d >= 0) {
-                    backgroundParticles.push(projectedPt)
+                if (isForeground) {
+                    foregroundParticles.push(item)
                 } else {
-                    foregroundParticles.push(projectedPt)
+                    backgroundParticles.push(item)
                 }
             }
 
-            backgroundParticles.sort((a, b) => b.z - a.z)
-            foregroundParticles.sort((a, b) => b.z - a.z)
+            backgroundParticles.sort((a, b) => a.z - b.z)
+            foregroundParticles.sort((a, b) => a.z - b.z)
 
             for (let i = 0; i < backgroundParticles.length; i++) {
                 const pt = backgroundParticles[i]
@@ -352,12 +323,6 @@ export default function BlackHole(props: BlackHoleProps) {
             }
             ctx.globalAlpha = 1.0
 
-            if (showCenter !== false) {
-                const hexToRgb = (colorStr: string) => {
-                    let r = 0,
-                        g = 0,
-                        b = 0
-                    if (!colorStr) return { r, g, b }
 
                     if (colorStr.startsWith("#")) {
                         const hex = colorStr.replace("#", "")
@@ -461,7 +426,7 @@ export default function BlackHole(props: BlackHoleProps) {
         showCenter,
         particleCount,
         particleSize,
-        JSON.stringify(colors),
+        colorsKey,
         outerRadFromSize,
         tilt,
         tiltSideway,
