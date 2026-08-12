@@ -1,13 +1,13 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { PRODUCTS, type Product, type ProductSize } from '@/data/products';
+import type { Product, ProductSize } from '@/data/products';
 import {
   updateProductStockInSupabase,
   updateProductPriceInSupabase,
   createProductInSupabase,
   deleteProductFromSupabase,
 } from '@/lib/supabase/products';
-import { updateOrderStatusInSupabase } from '@/lib/supabase/orders';
+import { updateOrderStatusInSupabase, fetchOrdersFromSupabase } from '@/lib/supabase/orders';
 
 export type AdminOrder = {
   id: string;
@@ -31,81 +31,10 @@ export type AdminOrder = {
   createdAt: string;
 };
 
-const INITIAL_ORDERS: AdminOrder[] = [
-  {
-    id: 'ORD-8921',
-    customerName: 'Aarav Sharma',
-    email: 'aarav@gmail.com',
-    phone: '+91 98765 43210',
-    address: 'B-402, Cyber Heights, HSR Layout',
-    city: 'Bengaluru',
-    pincode: '560102',
-    items: [
-      {
-        productId: 'outside-flame-tee',
-        name: 'OUTSIDE FLAME TEE',
-        size: 'L',
-        quantity: 1,
-        price: 749,
-        image: '/bgrem1.png',
-      },
-    ],
-    totalAmount: 749,
-    status: 'Shipped',
-    paymentMethod: 'UPI / GPay',
-    createdAt: '2026-08-11 14:30',
-  },
-  {
-    id: 'ORD-8922',
-    customerName: 'Rohan Mehta',
-    email: 'rohan.m@yahoo.com',
-    phone: '+91 91234 56789',
-    address: 'Flat 12, Sunrise Apartments, Bandra West',
-    city: 'Mumbai',
-    pincode: '400050',
-    items: [
-      {
-        productId: 'void-skull-tee',
-        name: 'VOID SKULL TEE',
-        size: 'M',
-        quantity: 2,
-        price: 749,
-        image: '/bgrem2.png',
-      },
-    ],
-    totalAmount: 1498,
-    status: 'Processing',
-    paymentMethod: 'Credit Card',
-    createdAt: '2026-08-12 09:15',
-  },
-  {
-    id: 'ORD-8923',
-    customerName: 'Ananya Verma',
-    email: 'ananya.v@outlook.com',
-    phone: '+91 99887 76655',
-    address: '77, Vasant Vihar, Block C',
-    city: 'New Delhi',
-    pincode: '110057',
-    items: [
-      {
-        productId: 'shark-mark-tee',
-        name: 'SHARK MARK TEE',
-        size: 'S',
-        quantity: 1,
-        price: 749,
-        image: '/ed2.jpeg',
-      },
-    ],
-    totalAmount: 749,
-    status: 'Delivered',
-    paymentMethod: 'Cash on Delivery',
-    createdAt: '2026-08-10 11:20',
-  },
-];
-
 type AdminState = {
   products: Product[];
   orders: AdminOrder[];
+  loadOrders: () => Promise<void>;
   updateStock: (productId: string, newStock: number) => void;
   updatePrice: (productId: string, newPrice: number, compareAtPrice?: number) => void;
   toggleSizeAvailability: (productId: string, size: ProductSize) => void;
@@ -118,8 +47,19 @@ type AdminState = {
 export const useAdminStore = create<AdminState>()(
   persist(
     (set) => ({
-      products: PRODUCTS,
-      orders: INITIAL_ORDERS,
+      products: [],
+      orders: [],
+
+      loadOrders: async () => {
+        try {
+          const liveOrders = await fetchOrdersFromSupabase();
+          if (liveOrders) {
+            set({ orders: liveOrders });
+          }
+        } catch (e) {
+          // ignore
+        }
+      },
 
       updateStock: (productId, newStock) => {
         updateProductStockInSupabase(productId, newStock);

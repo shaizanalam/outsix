@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useWishlistStore } from '@/store/wishlist';
 import { useCartStore } from '@/store/cart';
 import { useUIStore } from '@/store/ui';
-import { PRODUCTS } from '@/data/products';
+import { getProductBySlug } from '@/data/products';
 
 export default function WishlistPage() {
   const { items, removeItem } = useWishlistStore();
@@ -14,7 +14,7 @@ export default function WishlistPage() {
   const { addToast } = useUIStore();
 
   const handleMoveToBag = (productId: string) => {
-    const product = PRODUCTS.find((p) => p.id === productId);
+    const product = getProductBySlug(productId);
     if (!product || product.availableSizes.length === 0) return;
     addItem(product, product.availableSizes[0]);
     removeItem(productId);
@@ -67,7 +67,7 @@ export default function WishlistPage() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-5 gap-x-3 md:gap-y-8 md:gap-x-6">
             <AnimatePresence>
               {items.map((item) => {
-                const product = PRODUCTS.find((p) => p.id === item.productId);
+                const product = getProductBySlug(item.productId);
                 const soldOut = !product || product.availableSizes.length === 0;
 
                 return (

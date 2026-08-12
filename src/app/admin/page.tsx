@@ -31,7 +31,7 @@ export default function AdminPage() {
   const [categoryFilter, setCategoryFilter] = useState<string>('ALL');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  const { orders, updateOrderStatus } = useAdminStore();
+  const { orders, updateOrderStatus, loadOrders } = useAdminStore();
   const {
     products,
     updateStock,
@@ -40,9 +40,15 @@ export default function AdminPage() {
     addProduct,
     deleteProduct,
     restockAllLowStock,
+    loadProducts,
   } = useProductStore();
 
   const { addToast } = useUIStore();
+
+  useEffect(() => {
+    loadOrders();
+    loadProducts();
+  }, [loadOrders, loadProducts]);
 
   // Metrics
   const totalRevenue = orders.reduce((sum, o) => sum + o.totalAmount, 0);

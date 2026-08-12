@@ -5,7 +5,7 @@ import { X, Plus, Minus, Trash2, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCartStore } from '@/store/cart';
 import { useWishlistStore } from '@/store/wishlist';
-import { PRODUCTS } from '@/data/products';
+import { getProductBySlug } from '@/data/products';
 
 const SHIPPING_THRESHOLD = 999;
 
@@ -18,7 +18,7 @@ export function CartDrawer() {
   const remainingForFree = SHIPPING_THRESHOLD - subtotal;
 
   const handleMoveToWishlist = (item: (typeof items)[0]) => {
-    const product = PRODUCTS.find((p) => p.id === item.productId);
+    const product = getProductBySlug(item.productId);
     if (product) addToWishlist(product);
     removeItem(item.productId, item.size);
   };
