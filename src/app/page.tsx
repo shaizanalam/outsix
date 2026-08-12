@@ -7,6 +7,7 @@ import { useRef, useState } from 'react';
 import { AnnouncementTicker } from '@/components/layout/AnnouncementTicker';
 import { ProductGrid } from '@/components/product/ProductGrid';
 import { useProductStore } from '@/store/products';
+import type { Product } from '@/data/products';
 
 export default function HomePage() {
   const storeProducts = useProductStore((s) => s.products);
@@ -360,7 +361,7 @@ function HeroSection() {
 /* ============================================================
    02 — NEW DROP SECTION
    ============================================================ */
-function NewDropSection({ products }: { products: typeof PRODUCTS }) {
+function NewDropSection({ products }: { products: Product[] }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -508,7 +509,7 @@ function ShopByCategorySection() {
 /* ============================================================
    06 — BEST SELLERS
    ============================================================ */
-function BestSellersSection({ products }: { products: typeof PRODUCTS }) {
+function BestSellersSection({ products }: { products: Product[] }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
