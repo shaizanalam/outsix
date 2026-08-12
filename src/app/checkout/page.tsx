@@ -237,8 +237,8 @@ export default function CheckoutPage() {
                           type="radio"
                           name="payment"
                           value={opt.value}
-                          checked={form.paymentMethod === (opt.value as CheckoutFormState['paymentMethod'])}
-                          onChange={() => set('paymentMethod', opt.value as CheckoutFormState['paymentMethod'])}
+                          checked={form.paymentMethod === (opt.value as FormData['paymentMethod'])}
+                          onChange={() => set('paymentMethod', opt.value as FormData['paymentMethod'])}
                           style={{ accentColor: 'var(--text-primary)' }}
                         />
                         <div>
