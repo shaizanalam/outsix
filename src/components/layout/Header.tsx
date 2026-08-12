@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { Search, Heart, ShoppingBag, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -25,12 +26,15 @@ const SECONDARY_NAV = [
 ];
 
 export function Header() {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [shopHovered, setShopHovered] = useState(false);
 
   const cartCount = useCartStore((s) => s.getTotalItems());
   const wishlistCount = useWishlistStore((s) => s.items.length);
   const { openSearch, openMobileMenu, isMobileMenuOpen, closeMobileMenu } = useUIStore();
+
+  if (pathname?.startsWith('/admin')) return null;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);

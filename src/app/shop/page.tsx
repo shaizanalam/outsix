@@ -3,12 +3,14 @@
 import { useState, useMemo } from 'react';
 import { SlidersHorizontal, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { PRODUCTS, CATEGORIES, type ProductCategory } from '@/data/products';
+import { CATEGORIES, type ProductCategory } from '@/data/products';
 import { ProductGrid } from '@/components/product/ProductGrid';
+import { useAdminStore } from '@/store/admin';
 
 type SortOption = 'featured' | 'newest' | 'price-asc' | 'price-desc' | 'best-selling';
 
 export default function ShopPage() {
+  const storeProducts = useAdminStore((s) => s.products);
   const [selectedCategories, setSelectedCategories] = useState<ProductCategory[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 2000]);
@@ -17,7 +19,7 @@ export default function ShopPage() {
   const [showMobileFilter, setShowMobileFilter] = useState(false);
 
   const filtered = useMemo(() => {
-    let products = [...PRODUCTS];
+    let products = [...(storeProducts || [])];
 
     if (selectedCategories.length > 0) {
       products = products.filter((p) => selectedCategories.includes(p.category));

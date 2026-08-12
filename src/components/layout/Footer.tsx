@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Logo } from '@/components/ui/Logo';
 
 const FOOTER_SECTIONS = [
@@ -29,6 +30,7 @@ const FOOTER_SECTIONS = [
     links: [
       { href: '/about', label: 'ABOUT' },
       { href: '/contact', label: 'CONTACT' },
+      { href: '/admin', label: 'ADMIN PORTAL' },
     ],
   },
   {
@@ -40,6 +42,9 @@ const FOOTER_SECTIONS = [
 ];
 
 export function Footer() {
+  const pathname = usePathname();
+  if (pathname?.startsWith('/admin')) return null;
+
   return (
     <footer
       style={{

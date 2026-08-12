@@ -418,33 +418,49 @@ export const PRODUCTS: Product[] = [
   },
 ];
 
+import { useAdminStore } from '@/store/admin';
+
 export const CATEGORIES: ProductCategory[] = ['TEES', 'HOODIES', 'BOTTOMS', 'ACCESSORIES', 'HEADWEAR'];
 
+export function getLiveProducts(): Product[] {
+  if (typeof window !== 'undefined') {
+    try {
+      const stateProducts = useAdminStore.getState().products;
+      if (stateProducts && stateProducts.length > 0) {
+        return stateProducts;
+      }
+    } catch (e) {
+      // fallback
+    }
+  }
+  return PRODUCTS;
+}
+
 export function getProductBySlug(slug: string): Product | undefined {
-  return PRODUCTS.find((p) => p.slug === slug);
+  return getLiveProducts().find((p) => p.slug === slug);
 }
 
 export function getProductsByCategory(category: ProductCategory): Product[] {
-  return PRODUCTS.filter((p) => p.category === category);
+  return getLiveProducts().filter((p) => p.category === category);
 }
 
 export function getProductsByCollection(collectionSlug: string): Product[] {
-  return PRODUCTS.filter((p) => p.collection === collectionSlug);
+  return getLiveProducts().filter((p) => p.collection === collectionSlug);
 }
 
 export function getFeaturedProducts(): Product[] {
-  return PRODUCTS.filter((p) => p.featured);
+  return getLiveProducts().filter((p) => p.featured);
 }
 
 export function getRelatedProducts(product: Product, limit = 4): Product[] {
-  return PRODUCTS.filter(
+  return getLiveProducts().filter(
     (p) => p.id !== product.id && (p.category === product.category || p.collection === product.collection)
   ).slice(0, limit);
 }
 
 export function searchProducts(query: string): Product[] {
   const q = query.toLowerCase();
-  return PRODUCTS.filter(
+  return getLiveProducts().filter(
     (p) =>
       p.name.toLowerCase().includes(q) ||
       p.category.toLowerCase().includes(q) ||

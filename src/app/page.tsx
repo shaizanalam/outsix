@@ -7,10 +7,14 @@ import { useRef, useState } from 'react';
 import { AnnouncementTicker } from '@/components/layout/AnnouncementTicker';
 import { ProductGrid } from '@/components/product/ProductGrid';
 import { PRODUCTS, COLLECTIONS } from '@/data/products';
+import { useAdminStore } from '@/store/admin';
 
 export default function HomePage() {
-  const newDropProducts = PRODUCTS.filter((p) => p.collection === 'drop-01').slice(0, 6);
-  const bestSellers = PRODUCTS.filter((p) => p.badge === 'BESTSELLER' || p.featured).slice(0, 4);
+  const storeProducts = useAdminStore((s) => s.products);
+  const productsList = storeProducts && storeProducts.length > 0 ? storeProducts : PRODUCTS;
+
+  const newDropProducts = productsList.filter((p) => p.collection === 'drop-01' || p.category === 'TEES').slice(0, 6);
+  const bestSellers = productsList.filter((p) => p.badge === 'BESTSELLER' || p.featured || p.stock > 0).slice(0, 4);
 
   return (
     <div style={{ paddingTop: '72px' }}>
@@ -266,7 +270,7 @@ function HeroSection() {
           transition={{ duration: 0.8, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
         >
           <p className="font-editorial" style={{ fontSize: '11px', color: 'var(--text-muted)', letterSpacing: '0.2em', marginBottom: '16px' }}>
-            SS26 — DROP 01
+
           </p>
           <h1
             className="font-display"

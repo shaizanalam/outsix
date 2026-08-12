@@ -22,6 +22,7 @@ const MENU_SECTIONS = [
   { label: 'ABOUT', href: '/about' },
   { label: 'SEARCH', href: null, action: 'search' as const },
   { label: 'ACCOUNT', href: '/account' },
+  { label: 'ADMIN DASHBOARD', href: '/admin' },
 ];
 
 export function MobileMenu() {

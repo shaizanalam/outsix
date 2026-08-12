@@ -6,6 +6,7 @@ import { ArrowRight, Lock, Shield } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCartStore } from '@/store/cart';
 import { useRouter } from 'next/navigation';
+import { createOrderInSupabase } from '@/lib/supabase/orders';
 
 type FormData = {
   email: string;
@@ -94,7 +95,26 @@ export default function CheckoutPage() {
 
   const handlePlaceOrder = async () => {
     setProcessing(true);
-    await new Promise((r) => setTimeout(r, 1800));
+    await createOrderInSupabase({
+      customerName: form.fullName || 'OUTSIX Customer',
+      email: form.email,
+      phone: form.phone,
+      address: form.address,
+      city: form.city,
+      pincode: form.pincode,
+      totalAmount: total,
+      status: 'Processing',
+      paymentMethod: form.paymentMethod.toUpperCase(),
+      items: items.map((it) => ({
+        productId: it.product.id,
+        name: it.product.name,
+        size: it.size,
+        quantity: it.quantity,
+        price: it.product.price,
+        image: it.product.images[0] || '/ed2.jpeg',
+      })),
+    });
+    await new Promise((r) => setTimeout(r, 1200));
     clearCart();
     router.push('/checkout/success');
   };
