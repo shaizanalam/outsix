@@ -4,17 +4,12 @@ import { PRODUCTS, type Product } from '@/data/products';
 const isUUID = (str: string) =>
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str);
 
-export async function fetchProductsFromSupabase(): Promise<Product[]> {
-  if (!isSupabaseConfigured) return PRODUCTS;
+export async function fetchProductsFromSupabase(): Promise<Product[] | null> {
+  if (!isSupabaseConfigured) return null;
 
   const { data, error } = await supabaseFetch<any[]>('/rest/v1/products?select=*&order=created_at.desc');
   if (error || !data) {
-    return PRODUCTS;
-  }
-
-  // If DB has products, return DB products; otherwise seed initial list
-  if (data.length === 0) {
-    return PRODUCTS;
+    return null;
   }
 
   return data.map((p: any) => ({

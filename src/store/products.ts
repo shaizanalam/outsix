@@ -30,7 +30,7 @@ export const useProductStore = create<ProductState>()(
       loadProducts: async () => {
         try {
           const liveProducts = await fetchProductsFromSupabase();
-          if (liveProducts && liveProducts.length > 0) {
+          if (liveProducts !== null) {
             set({ products: liveProducts, isLoaded: true });
           }
         } catch (err) {
