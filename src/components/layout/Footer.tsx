@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import logoImg from '../../../logo.jpeg';
 
 const FOOTER_SECTIONS = [
   {
@@ -63,17 +64,25 @@ export function Footer() {
           <div style={{ gridColumn: 'span 1' }}>
             <Link
               href="/"
-              className="font-display"
+              aria-label="OUTSIX Home"
               style={{
-                fontSize: '24px',
-                letterSpacing: '0.12em',
-                color: 'var(--text-primary)',
-                textDecoration: 'none',
-                display: 'block',
+                display: 'inline-flex',
+                alignItems: 'center',
+                height: '40px',
                 marginBottom: '16px',
               }}
             >
-              OUTSIX
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={logoImg.src}
+                alt="OUTSIX"
+                style={{
+                  height: '100%',
+                  width: 'auto',
+                  objectFit: 'contain',
+                  mixBlendMode: 'screen',
+                }}
+              />
             </Link>
             <p
               style={{
