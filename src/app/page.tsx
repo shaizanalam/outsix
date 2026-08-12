@@ -358,12 +358,17 @@ function HeroSection() {
    ============================================================ */
 function NewDropSection({ products }: { products: typeof PRODUCTS }) {
   return (
-    <section
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
       style={{
         padding: 'clamp(64px, 10vh, 128px) 0',
         borderTop: '1px solid var(--border)',
       }}
       aria-labelledby="new-drop-heading"
+      role="region"
     >
       <div className="container-outsix">
         {/* HEADER */}
@@ -409,7 +414,7 @@ function NewDropSection({ products }: { products: typeof PRODUCTS }) {
 
         <ProductGrid products={products} columns={3} priorityCount={3} />
       </div>
-    </section>
+    </motion.div>
   );
 }
 
@@ -418,7 +423,11 @@ function NewDropSection({ products }: { products: typeof PRODUCTS }) {
    ============================================================ */
 function FeaturedEditorialSection() {
   return (
-    <section
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
       style={{
         backgroundColor: 'var(--surface)',
         padding: 'clamp(64px, 10vh, 128px) 0',
@@ -426,15 +435,11 @@ function FeaturedEditorialSection() {
         borderBottom: '1px solid var(--border)',
       }}
       aria-label="Featured product"
+      role="region"
     >
       <div className="container-outsix">
         <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '48px',
-            alignItems: 'center',
-          }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center"
         >
           {/* IMAGE BLOCK */}
           <div
@@ -498,15 +503,7 @@ function FeaturedEditorialSection() {
           </div>
         </div>
       </div>
-
-      <style>{`
-        @media (max-width: 768px) {
-          section[aria-label="Featured product"] .container-outsix > div {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
-    </section>
+    </motion.div>
   );
 }
 
@@ -593,24 +590,17 @@ function CollectionCampaignSection() {
   return (
     <section style={{ borderTop: '1px solid var(--border)' }} aria-label="Collections">
       {COLLECTIONS.slice(0, 2).map((col, i) => (
-        <div
+        <motion.div
           key={col.id}
-          style={{
-            display: 'grid',
-            gridTemplateColumns: i % 2 === 0 ? '3fr 2fr' : '2fr 3fr',
-            minHeight: '60vh',
-            borderBottom: '1px solid var(--border)',
-          }}
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className={`grid grid-cols-1 md:grid-cols-5 min-h-[60vh] border-b border-[var(--border)]`}
         >
           {/* IMAGE */}
           <div
-            style={{
-              order: i % 2 === 0 ? 0 : 1,
-              backgroundColor: i === 0 ? '#080808' : '#060606',
-              position: 'relative',
-              overflow: 'hidden',
-              minHeight: '400px',
-            }}
+            className={`relative overflow-hidden min-h-[400px] md:min-h-full ${i % 2 === 0 ? 'md:order-1 md:col-span-3' : 'md:order-2 md:col-span-2'}`}
             data-cursor="view"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -622,14 +612,7 @@ function CollectionCampaignSection() {
 
           {/* TEXT */}
           <div
-            style={{
-              order: i % 2 === 0 ? 1 : 0,
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'flex-end',
-              padding: 'clamp(32px, 5vw, 64px)',
-              backgroundColor: 'var(--surface)',
-            }}
+            className={`flex flex-col justify-end p-8 md:p-16 bg-[var(--surface)] ${i % 2 === 0 ? 'md:order-2 md:col-span-2' : 'md:order-1 md:col-span-3'}`}
           >
             <p className="font-editorial" style={{ fontSize: '10px', color: 'var(--text-muted)', letterSpacing: '0.16em', marginBottom: '16px' }}>
               {col.name}
@@ -664,19 +647,8 @@ function CollectionCampaignSection() {
               EXPLORE <ArrowRight size={14} />
             </Link>
           </div>
-        </div>
+        </motion.div>
       ))}
-
-      <style>{`
-        @media (max-width: 768px) {
-          section[aria-label="Collections"] > div {
-            grid-template-columns: 1fr !important;
-          }
-          section[aria-label="Collections"] > div > div {
-            order: unset !important;
-          }
-        }
-      `}</style>
     </section>
   );
 }
@@ -686,9 +658,14 @@ function CollectionCampaignSection() {
    ============================================================ */
 function BestSellersSection({ products }: { products: typeof PRODUCTS }) {
   return (
-    <section
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
       style={{ padding: 'clamp(64px, 10vh, 128px) 0', borderTop: '1px solid var(--border)' }}
       aria-labelledby="bestsellers-heading"
+      role="region"
     >
       <div className="container-outsix">
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '48px' }}>
@@ -707,7 +684,7 @@ function BestSellersSection({ products }: { products: typeof PRODUCTS }) {
         </div>
         <ProductGrid products={products} columns={4} />
       </div>
-    </section>
+    </motion.div>
   );
 }
 

@@ -98,15 +98,7 @@ export default function CheckoutPage() {
       </div>
 
       <div
-        className="container-outsix"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 380px',
-          gap: '64px',
-          paddingTop: '48px',
-          paddingBottom: '96px',
-          alignItems: 'start',
-        }}
+        className="container-outsix grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-8 lg:gap-16 items-start py-12 lg:py-24"
       >
         {/* FORM COLUMN */}
         <div>
@@ -372,13 +364,6 @@ export default function CheckoutPage() {
         </div>
       </div>
 
-      <style>{`
-        @media (max-width: 1024px) {
-          .container-outsix > [style*="grid-template-columns: 1fr 380px"] {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
     </div>
   );
 }

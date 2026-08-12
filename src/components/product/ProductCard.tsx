@@ -253,7 +253,7 @@ export function ProductCard({ product }: Props) {
         <Link href={`/product/${product.slug}`} style={{ textDecoration: 'none' }}>
           <h3
             className="font-editorial truncate-1"
-            style={{ fontSize: '12px', color: 'var(--text-primary)', letterSpacing: '0.06em', marginBottom: '4px' }}
+            style={{ fontSize: '12px', color: hovered ? 'var(--text-secondary)' : 'var(--text-primary)', letterSpacing: '0.06em', marginBottom: '4px', transition: 'color var(--transition-fast)' }}
           >
             {product.name}
           </h3>
