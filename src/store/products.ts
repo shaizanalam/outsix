@@ -35,7 +35,7 @@ export const useProductStore = create<ProductState>()(
           if (liveProducts !== null) {
             set({ products: liveProducts, isLoaded: true });
           }
-        } catch (err) {
+        } catch {
           set({ isLoaded: true });
         }
       },

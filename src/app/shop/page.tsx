@@ -51,7 +51,7 @@ export default function ShopPage() {
     }
 
     return products;
-  }, [selectedCategories, selectedSizes, priceRange, sort]);
+  }, [storeProducts, selectedCategories, selectedSizes, priceRange, sort]);
 
   const toggleCategory = (cat: ProductCategory) =>
     setSelectedCategories((prev) =>

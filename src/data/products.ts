@@ -58,17 +58,18 @@ export const COLLECTIONS: Collection[] = [
 // ZERO MOCK PRODUCTS — ONLY LIVE BACKEND DATA IS LOADED
 export const PRODUCTS: Product[] = [];
 
+import { useProductStore } from '@/store/products';
+
 export const CATEGORIES: ProductCategory[] = ['TEES', 'HOODIES', 'BOTTOMS', 'ACCESSORIES', 'HEADWEAR'];
 
 export function getLiveProducts(): Product[] {
   if (typeof window !== 'undefined') {
     try {
-      const { useProductStore } = require('@/store/products');
       const stateProducts = useProductStore.getState().products;
       if (Array.isArray(stateProducts)) {
         return stateProducts;
       }
-    } catch (e) {
+    } catch {
       // fallback
     }
   }

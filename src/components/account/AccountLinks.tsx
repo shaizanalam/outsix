@@ -2,9 +2,16 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Package, Heart, User, MapPin, Settings, ArrowRight, LogOut, Lock, Mail } from 'lucide-react';
+import { Package, Heart, User, MapPin, Settings, ArrowRight, LogOut } from 'lucide-react';
 import { signInWithEmail, signUpWithEmail, signOutUser, getCurrentUserSession } from '@/lib/supabase/auth';
 import { useUIStore } from '@/store/ui';
+
+type AccountUser = {
+  email: string;
+  user_metadata?: {
+    full_name?: string;
+  };
+};
 
 const ACCOUNT_LINKS = [
   { href: '/account/orders', icon: Package, label: 'ORDERS', desc: 'Track and view your orders' },
@@ -15,7 +22,7 @@ const ACCOUNT_LINKS = [
 ];
 
 export function AccountLinks() {
-  const [sessionUser, setSessionUser] = useState<any>(null);
+  const [sessionUser, setSessionUser] = useState<AccountUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [mode, setMode] = useState<'login' | 'signup'>('login');
   const [email, setEmail] = useState('');

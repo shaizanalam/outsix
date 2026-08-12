@@ -34,13 +34,13 @@ export function Header() {
   const wishlistCount = useWishlistStore((s) => s.items.length);
   const { openSearch, openMobileMenu, isMobileMenuOpen, closeMobileMenu } = useUIStore();
 
-  if (pathname?.startsWith('/admin')) return null;
-
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  if (pathname?.startsWith('/admin')) return null;
 
   return (
     <header

@@ -1,11 +1,34 @@
 import { supabaseFetch, isSupabaseConfigured } from './client';
 import type { AdminOrder } from '@/store/admin';
 
+type DbOrderItemRecord = {
+  product_id: string;
+  product_name: string;
+  size: string;
+  quantity: number;
+  price: number;
+};
+
+type DbOrderRecord = {
+  id: string;
+  customer_name: string;
+  email: string;
+  phone: string;
+  address: string;
+  city: string;
+  pincode: string;
+  total_amount: number;
+  status: AdminOrder['status'];
+  payment_method: string;
+  created_at: string;
+  order_items?: DbOrderItemRecord[];
+};
+
 export async function createOrderInSupabase(orderData: Omit<AdminOrder, 'id' | 'createdAt'>) {
   if (!isSupabaseConfigured) return null;
 
   const orderId = `ORD-${Math.floor(1000 + Math.random() * 9000)}`;
-  const { data, error } = await supabaseFetch('/rest/v1/orders', {
+  const { error } = await supabaseFetch('/rest/v1/orders', {
     method: 'POST',
     headers: { Prefer: 'return=representation' },
     body: JSON.stringify({
@@ -46,10 +69,10 @@ export async function createOrderInSupabase(orderData: Omit<AdminOrder, 'id' | '
 export async function fetchOrdersFromSupabase(): Promise<AdminOrder[] | null> {
   if (!isSupabaseConfigured) return null;
 
-  const { data, error } = await supabaseFetch<any[]>('/rest/v1/orders?select=*,order_items(*)&order=created_at.desc');
+  const { data, error } = await supabaseFetch<DbOrderRecord[]>('/rest/v1/orders?select=*,order_items(*)&order=created_at.desc');
   if (error || !data) return null;
 
-  return data.map((o: any) => ({
+  return data.map((o: DbOrderRecord) => ({
     id: o.id,
     customerName: o.customer_name,
     email: o.email,
@@ -61,7 +84,7 @@ export async function fetchOrdersFromSupabase(): Promise<AdminOrder[] | null> {
     status: o.status,
     paymentMethod: o.payment_method,
     createdAt: new Date(o.created_at).toLocaleString('en-IN'),
-    items: (o.order_items || []).map((it: any) => ({
+    items: (o.order_items || []).map((it: DbOrderItemRecord) => ({
       productId: it.product_id,
       name: it.product_name,
       size: it.size,

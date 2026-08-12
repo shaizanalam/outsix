@@ -6,7 +6,6 @@ import { motion } from 'framer-motion';
 import { useRef, useState } from 'react';
 import { AnnouncementTicker } from '@/components/layout/AnnouncementTicker';
 import { ProductGrid } from '@/components/product/ProductGrid';
-import { PRODUCTS, COLLECTIONS } from '@/data/products';
 import { useProductStore } from '@/store/products';
 
 export default function HomePage() {

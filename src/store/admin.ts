@@ -56,7 +56,7 @@ export const useAdminStore = create<AdminState>()(
           if (liveOrders) {
             set({ orders: liveOrders });
           }
-        } catch (e) {
+        } catch {
           // ignore
         }
       },

@@ -1,18 +1,38 @@
 import { supabaseFetch, isSupabaseConfigured } from './client';
 import { PRODUCTS, type Product } from '@/data/products';
 
+type DbProductRecord = {
+  id: string;
+  slug: string;
+  name: string;
+  description?: string;
+  details?: string;
+  material?: string;
+  fit?: string;
+  price: number | string;
+  compare_at_price?: number | string | null;
+  images?: string[];
+  category: Product['category'];
+  collection_id?: string;
+  sizes?: Product['sizes'];
+  available_sizes?: Product['availableSizes'];
+  stock: number | string;
+  featured?: boolean;
+  badge?: string;
+};
+
 const isUUID = (str: string) =>
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str);
 
 export async function fetchProductsFromSupabase(): Promise<Product[] | null> {
-  if (!isSupabaseConfigured) return null;
+  if (!isSupabaseConfigured) return PRODUCTS;
 
-  const { data, error } = await supabaseFetch<any[]>('/rest/v1/products?select=*&order=created_at.desc');
+  const { data, error } = await supabaseFetch<DbProductRecord[]>('/rest/v1/products?select=*&order=created_at.desc');
   if (error || !data) {
-    return null;
+    return PRODUCTS;
   }
 
-  return data.map((p: any) => ({
+  return data.map((p: DbProductRecord) => ({
     id: p.id,
     slug: p.slug,
     name: p.name,
@@ -53,7 +73,7 @@ export async function updateProductPriceInSupabase(productId: string, price: num
 
 export async function createProductInSupabase(product: Omit<Product, 'id'>) {
   if (!isSupabaseConfigured) return null;
-  const { data, error } = await supabaseFetch('/rest/v1/products', {
+  const { data } = await supabaseFetch('/rest/v1/products', {
     method: 'POST',
     headers: { Prefer: 'return=representation' },
     body: JSON.stringify({

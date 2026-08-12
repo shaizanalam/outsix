@@ -11,10 +11,10 @@ export const SUPABASE_CONFIG = {
   anonKey: supabaseAnonKey,
 };
 
-export async function supabaseFetch<T = any>(
+export async function supabaseFetch<T = unknown>(
   endpoint: string,
   options: RequestInit = {}
-): Promise<{ data: T | null; error: any }> {
+): Promise<{ data: T | null; error: string | null }> {
   if (!isSupabaseConfigured) {
     return { data: null, error: 'Supabase not configured' };
   }
@@ -24,7 +24,7 @@ export async function supabaseFetch<T = any>(
     'Content-Type': 'application/json',
     apikey: SUPABASE_CONFIG.anonKey,
     Authorization: `Bearer ${SUPABASE_CONFIG.anonKey}`,
-    ...(options.headers as Record<string, string> || {}),
+    ...((options.headers as Record<string, string>) || {}),
   };
 
   try {
@@ -33,9 +33,9 @@ export async function supabaseFetch<T = any>(
       const errText = await res.text();
       return { data: null, error: errText };
     }
-    const data = await res.json().catch(() => null);
+    const data = (await res.json().catch(() => null)) as T;
     return { data, error: null };
   } catch (err) {
-    return { data: null, error: err };
+    return { data: null, error: err instanceof Error ? err.message : String(err) };
   }
 }

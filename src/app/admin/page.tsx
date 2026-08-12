@@ -295,6 +295,7 @@ function ProductRowItem({
       {/* LEFT: IMAGE & INFO */}
       <div className="flex items-center gap-4 min-w-[240px]">
         <div className="w-14 h-18 bg-black rounded-xl border border-neutral-800 overflow-hidden shrink-0">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={product.images[0] || '/ed2.jpeg'}
             alt={product.name}
@@ -432,7 +433,7 @@ function SimpleOrderCard({
           <span className="text-xs text-neutral-400">Order Status:</span>
           <select
             value={order.status}
-            onChange={(e) => onStatusChange(e.target.value as any)}
+            onChange={(e) => onStatusChange(e.target.value as AdminOrder['status'])}
             className="px-3 py-1.5 bg-black border border-neutral-700 text-xs font-bold text-white rounded-xl outline-none"
           >
             <option value="Processing">Processing</option>
@@ -621,6 +622,7 @@ function AddProductModal({
               {imageUrl && (
                 <div className="flex items-center gap-3 p-2 bg-black border border-neutral-800 rounded-xl">
                   <div className="w-12 h-14 bg-neutral-900 rounded-lg overflow-hidden shrink-0 border border-neutral-700">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={imageUrl} alt="Preview" className="w-full h-full object-cover" />
                   </div>
                   <div className="flex-1 overflow-hidden">
