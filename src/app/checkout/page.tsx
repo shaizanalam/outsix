@@ -106,12 +106,12 @@ export default function CheckoutPage() {
       status: 'Processing',
       paymentMethod: form.paymentMethod.toUpperCase(),
       items: items.map((it) => ({
-        productId: it.product.id,
-        name: it.product.name,
+        productId: it.productId,
+        name: it.name,
         size: it.size,
         quantity: it.quantity,
-        price: it.product.price,
-        image: it.product.images[0] || '/ed2.jpeg',
+        price: it.price,
+        image: it.image || '/ed2.jpeg',
       })),
     });
     await new Promise((r) => setTimeout(r, 1200));
