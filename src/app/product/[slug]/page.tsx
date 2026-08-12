@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { notFound, useParams } from 'next/navigation';
 import Link from 'next/link';
-import { Heart, ArrowRight, ChevronDown, Minus, Plus, ZoomIn } from 'lucide-react';
+import { Heart, ChevronDown, Minus, Plus, ZoomIn } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCartStore } from '@/store/cart';
 import { useWishlistStore } from '@/store/wishlist';
@@ -19,15 +19,11 @@ export default function ProductPage() {
   if (!product) notFound();
 
   const related = getRelatedProducts(product, 4);
-  const { addToRecentlyViewed, recentlyViewed, addToast } = useUIStore();
+  const { addToRecentlyViewed, recentlyViewed } = useUIStore();
 
   useEffect(() => {
     addToRecentlyViewed(product);
   }, [product, addToRecentlyViewed]);
-
-  const recentProducts = PRODUCTS.filter((p) =>
-    recentlyViewed.some((r) => r.productId === p.id && r.productId !== product.id)
-  ).slice(0, 4);
 
   return (
     <div style={{ paddingTop: '72px' }}>
@@ -109,12 +105,9 @@ export default function ProductPage() {
 /* ============================================================
    PRODUCT GALLERY
    ============================================================ */
-import { TShirtGraphic } from '@/components/ui/TShirtGraphic';
-
 function ProductGallery({ product }: { product: Product }) {
   const [activeIdx, setActiveIdx] = useState(0);
   const [zoomed, setZoomed] = useState(false);
-  const graphicType = product.slug.includes('cross') || product.slug.includes('tribal') || product.slug.includes('gothic') || product.slug.includes('void') ? 'gothic' : 'skull';
 
   return (
     <div style={{ position: 'sticky', top: '80px' }}>
@@ -253,7 +246,7 @@ function ProductGallery({ product }: { product: Product }) {
               position: 'fixed',
               inset: 0,
               backgroundColor: 'rgba(0,0,0,0.92)',
-              zIndex: 'var(--z-modal)' as any,
+              zIndex: 100,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',

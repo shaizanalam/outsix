@@ -43,7 +43,7 @@ export function Header() {
         top: 0,
         left: 0,
         right: 0,
-        zIndex: 'var(--z-drawer)' as any,
+        zIndex: 50,
         transition: 'background-color var(--transition-base), border-color var(--transition-base), padding var(--transition-base)',
         backgroundColor: scrolled ? 'rgba(7,7,7,0.92)' : 'transparent',
         borderBottom: scrolled ? '1px solid var(--border)' : '1px solid transparent',

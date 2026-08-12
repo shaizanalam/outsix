@@ -2,14 +2,13 @@
 
 import Link from 'next/link';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useRef, useState } from 'react';
 import { AnnouncementTicker } from '@/components/layout/AnnouncementTicker';
 import { ProductGrid } from '@/components/product/ProductGrid';
-import { PRODUCTS, COLLECTIONS, getFeaturedProducts } from '@/data/products';
+import { PRODUCTS, COLLECTIONS } from '@/data/products';
 
 export default function HomePage() {
-  const featuredProducts = getFeaturedProducts();
   const newDropProducts = PRODUCTS.filter((p) => p.collection === 'drop-01').slice(0, 6);
   const bestSellers = PRODUCTS.filter((p) => p.badge === 'BESTSELLER' || p.featured).slice(0, 4);
 

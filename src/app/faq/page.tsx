@@ -1,6 +1,5 @@
 'use client';
 import { useState } from 'react';
-import type { Metadata } from 'next';
 
 const FAQS = [
   { q: 'What sizes do you carry?', a: 'We carry XS to XXL across most products. Sizing runs oversized — check our Size Guide for measurements.' },

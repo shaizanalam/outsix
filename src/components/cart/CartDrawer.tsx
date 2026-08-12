@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { X, Plus, Minus, Trash2, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCartStore } from '@/store/cart';
@@ -38,7 +37,7 @@ export function CartDrawer() {
               position: 'fixed',
               inset: 0,
               backgroundColor: 'rgba(0,0,0,0.6)',
-              zIndex: 'var(--z-overlay)' as any,
+              zIndex: 60,
             }}
           />
 
@@ -57,7 +56,7 @@ export function CartDrawer() {
               maxWidth: '480px',
               backgroundColor: 'var(--surface)',
               borderLeft: '1px solid var(--border)',
-              zIndex: 'var(--z-drawer)' as any,
+              zIndex: 70,
               display: 'flex',
               flexDirection: 'column',
             }}

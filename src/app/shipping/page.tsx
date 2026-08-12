@@ -15,7 +15,7 @@ export default function ShippingPage() {
         <p style={bodyStyle}>We currently ship across all major cities in India. International shipping coming soon.</p>
       </InfoSection>
       <InfoSection title="ORDER TRACKING">
-        <p style={bodyStyle}>Once your order is dispatched, you'll receive a tracking link via email. Track your order via your account.</p>
+        <p style={bodyStyle}>Once your order is dispatched, you&apos;ll receive a tracking link via email. Track your order via your account.</p>
       </InfoSection>
     </InfoPage>
   );

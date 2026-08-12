@@ -59,7 +59,7 @@ export default function ContactPage() {
                 <input
                   type={type}
                   value={form[key as keyof typeof form]}
-                  onChange={(e) => set(key as any, e.target.value)}
+                  onChange={(e) => set(key as keyof typeof form, e.target.value)}
                   placeholder={placeholder}
                   required
                   style={{ width: '100%', backgroundColor: 'transparent', border: '1px solid var(--border)', padding: '12px 14px', fontSize: '13px', color: 'var(--text-primary)', fontFamily: 'Inter', outline: 'none' }}

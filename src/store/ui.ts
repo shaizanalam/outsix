@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Product, ProductSize } from '@/data/products';
+import type { Product } from '@/data/products';
 
 type Toast = {
   id: string;

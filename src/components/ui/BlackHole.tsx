@@ -124,7 +124,7 @@ export default function BlackHole(props: BlackHoleProps) {
     const voidRadius = showCenter !== false ? (rawVoidRadius ?? 40) : 1
 
     const outerRadFromSize = useCallback(
-        (w: number, _h: number) => {
+        (w: number) => {
             const maxR = w / 2
             const pct = Math.max(0, Math.min(100, outerRadius)) / 100
             return voidRadius + pct * (maxR - voidRadius)

@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { SlidersHorizontal, ChevronDown, X } from 'lucide-react';
+import { SlidersHorizontal, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { PRODUCTS, CATEGORIES, type Product, type ProductCategory } from '@/data/products';
+import { PRODUCTS, CATEGORIES, type ProductCategory } from '@/data/products';
 import { ProductGrid } from '@/components/product/ProductGrid';
 
 type SortOption = 'featured' | 'newest' | 'price-asc' | 'price-desc' | 'best-selling';

@@ -14,9 +14,7 @@ type Props = {
   priority?: boolean;
 };
 
-import { TShirtGraphic } from '@/components/ui/TShirtGraphic';
-
-export function ProductCard({ product, priority = false }: Props) {
+export function ProductCard({ product }: Props) {
   const [hovered, setHovered] = useState(false);
   const [quickAddOpen, setQuickAddOpen] = useState(false);
   const [addedSize, setAddedSize] = useState<ProductSize | null>(null);
@@ -28,8 +26,6 @@ export function ProductCard({ product, priority = false }: Props) {
   const wishlisted = isWishlisted(product.id);
   const soldOut = product.availableSizes.length === 0;
   const lowStock = !soldOut && product.stock <= 10;
-
-  const graphicType = product.slug.includes('cross') || product.slug.includes('tribal') || product.slug.includes('gothic') || product.slug.includes('void') ? 'gothic' : 'skull';
 
   const handleQuickAdd = (size: ProductSize) => {
     addItem(product, size);

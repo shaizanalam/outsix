@@ -13,7 +13,7 @@ export function ToastContainer() {
         position: 'fixed',
         bottom: '24px',
         right: '24px',
-        zIndex: 'var(--z-toast)' as any,
+        zIndex: 100,
         display: 'flex',
         flexDirection: 'column',
         gap: '10px',
