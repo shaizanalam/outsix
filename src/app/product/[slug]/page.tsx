@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useCartStore } from '@/store/cart';
 import { useWishlistStore } from '@/store/wishlist';
 import { useUIStore } from '@/store/ui';
-import { getProductBySlug, getRelatedProducts, PRODUCTS } from '@/data/products';
+import { getProductBySlug, getRelatedProducts } from '@/data/products';
 import type { Product, ProductSize } from '@/data/products';
 import { ProductCard } from '@/components/product/ProductCard';
 
@@ -19,7 +19,7 @@ export default function ProductPage() {
   if (!product) notFound();
 
   const related = getRelatedProducts(product, 4);
-  const { addToRecentlyViewed, recentlyViewed } = useUIStore();
+  const { addToRecentlyViewed } = useUIStore();
 
   useEffect(() => {
     addToRecentlyViewed(product);

@@ -452,6 +452,7 @@ export default function BlackHole(props: BlackHoleProps) {
 
         animRef.current = requestAnimationFrame(draw)
         return () => cancelAnimationFrame(animRef.current)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         voidX,
         voidY,
