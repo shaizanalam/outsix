@@ -1,6 +1,6 @@
 'use client';
 
-import { use } from 'react';
+import { use, useEffect } from 'react';
 import { notFound } from 'next/navigation';
 import { COLLECTIONS } from '@/data/products';
 import { ProductGrid } from '@/components/product/ProductGrid';
@@ -11,7 +11,12 @@ type Props = { params: Promise<{ slug: string }> };
 export default function CollectionPage({ params }: Props) {
   const { slug } = use(params);
   const col = COLLECTIONS.find((c) => c.slug === slug);
+  const { loadProducts } = useProductStore();
   const storeProducts = useProductStore((s) => s.products);
+
+  useEffect(() => {
+    loadProducts();
+  }, [loadProducts]);
 
   if (!col) notFound();
 

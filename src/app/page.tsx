@@ -3,15 +3,20 @@
 import Link from 'next/link';
 import { ArrowRight, ArrowUpRight, ChevronDown } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { AnnouncementTicker } from '@/components/layout/AnnouncementTicker';
 import { ProductGrid } from '@/components/product/ProductGrid';
 import { useProductStore } from '@/store/products';
 import type { Product } from '@/data/products';
 
 export default function HomePage() {
+  const { loadProducts } = useProductStore();
   const storeProducts = useProductStore((s) => s.products);
   const productsList = storeProducts || [];
+
+  useEffect(() => {
+    loadProducts();
+  }, [loadProducts]);
 
   const newDropProducts = productsList.filter((p) => p.collection === 'drop-01' || p.category === 'TEES').slice(0, 6);
   const bestSellers = productsList.filter((p) => p.badge === 'BESTSELLER' || p.featured || p.stock > 0).slice(0, 4);

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { SlidersHorizontal, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CATEGORIES, type ProductCategory } from '@/data/products';
@@ -10,7 +10,12 @@ import { useProductStore } from '@/store/products';
 type SortOption = 'featured' | 'newest' | 'price-asc' | 'price-desc' | 'best-selling';
 
 export default function ShopPage() {
+  const { loadProducts } = useProductStore();
   const storeProducts = useProductStore((s) => s.products);
+
+  useEffect(() => {
+    loadProducts();
+  }, [loadProducts]);
   const [selectedCategories, setSelectedCategories] = useState<ProductCategory[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 100000]);
