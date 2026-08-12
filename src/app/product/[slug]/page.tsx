@@ -90,7 +90,7 @@ function ProductGallery({ product }: { product: Product }) {
   const [zoomed, setZoomed] = useState(false);
 
   return (
-    <div style={{ position: 'sticky', top: '80px' }}>
+    <div className="relative md:sticky md:top-[80px]">
       <div className="flex flex-col md:flex-row gap-3">
         {/* THUMBNAILS */}
         {product.images.length > 1 && (

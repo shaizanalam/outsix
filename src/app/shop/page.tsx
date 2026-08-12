@@ -96,7 +96,7 @@ export default function ShopPage() {
           borderBottom: '1px solid var(--border)',
           backgroundColor: 'var(--surface)',
           position: 'sticky',
-          top: '56px',
+          top: '72px',
           zIndex: 50,
         }}
       >
