@@ -64,13 +64,7 @@ export default function WishlistPage() {
             </Link>
           </div>
         ) : (
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(4, 1fr)',
-              gap: '32px 24px',
-            }}
-          >
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-5 gap-x-3 md:gap-y-8 md:gap-x-6">
             <AnimatePresence>
               {items.map((item) => {
                 const product = PRODUCTS.find((p) => p.id === item.productId);
@@ -163,20 +157,6 @@ export default function WishlistPage() {
           </div>
         )}
       </div>
-
-      <style>{`
-        @media (max-width: 1024px) {
-          .container-outsix > div > [style*="repeat(4"] {
-            grid-template-columns: repeat(3, 1fr) !important;
-          }
-        }
-        @media (max-width: 768px) {
-          .container-outsix > div > [style*="repeat(4"] {
-            grid-template-columns: repeat(2, 1fr) !important;
-            gap: 20px 12px !important;
-          }
-        }
-      `}</style>
     </div>
   );
 }

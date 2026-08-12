@@ -42,7 +42,7 @@ export default function AboutPage() {
       {/* THE CULTURE */}
       <section style={{ borderBottom: '1px solid var(--border)', padding: 'clamp(48px, 8vh, 96px) 0' }}>
         <div className="container-outsix">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '64px', alignItems: 'center' }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             <div
               style={{ aspectRatio: '4/5', backgroundColor: '#080808', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               data-cursor="view"
@@ -70,14 +70,6 @@ export default function AboutPage() {
           </h2>
         </div>
       </section>
-
-      <style>{`
-        @media (max-width: 768px) {
-          section > .container-outsix > div[style*="grid-template-columns"] {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
     </div>
   );
 }

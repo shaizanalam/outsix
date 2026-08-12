@@ -19,7 +19,7 @@ export default function ContactPage() {
           <h1 className="font-display" style={{ fontSize: 'clamp(32px, 5vw, 56px)', color: 'var(--text-primary)' }}>CONTACT</h1>
         </div>
       </div>
-      <div className="container-outsix" style={{ paddingTop: '48px', paddingBottom: '96px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '64px', maxWidth: '1000px' }}>
+      <div className="container-outsix grid grid-cols-1 md:grid-cols-2 gap-16 pt-12 pb-24 max-w-[1000px]">
         {/* INFO */}
         <div>
           <p style={{ fontSize: '15px', color: 'var(--text-secondary)', fontFamily: 'Inter', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -87,13 +87,6 @@ export default function ContactPage() {
         )}
       </div>
 
-      <style>{`
-        @media (max-width: 768px) {
-          .container-outsix > div[style*="grid-template-columns: 1fr 1fr"] {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
     </div>
   );
 }

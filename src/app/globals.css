@@ -213,6 +213,14 @@ body {
   }
 }
 
+/* === MOBILE VISIBILITY UTILITIES === */
+@media (max-width: 768px) {
+  .hidden-mobile { display: none !important; }
+}
+@media (min-width: 769px) {
+  .visible-mobile { display: none !important; }
+}
+
 /* Visually hidden (accessible) */
 .sr-only {
   position: absolute;

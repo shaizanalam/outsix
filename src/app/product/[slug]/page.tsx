@@ -44,15 +44,7 @@ export default function ProductPage() {
 
       {/* MAIN PRODUCT LAYOUT */}
       <div
-        className="container-outsix"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '64px',
-          paddingTop: '32px',
-          paddingBottom: '96px',
-          alignItems: 'start',
-        }}
+        className="container-outsix grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-start pt-8 pb-24"
       >
         {/* LEFT — GALLERY */}
         <ProductGallery product={product} />
@@ -75,7 +67,7 @@ export default function ProductPage() {
             <h2 id="related-heading" className="font-display" style={{ fontSize: 'clamp(24px, 3vw, 40px)', color: 'var(--text-primary)', marginBottom: '40px' }}>
               YOU MAY ALSO LIKE
             </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px' }}>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
               {related.map((p) => (
                 <ProductCard key={p.id} product={p} />
               ))}
@@ -86,18 +78,6 @@ export default function ProductPage() {
 
       {/* MOBILE STICKY BAR */}
       <MobileStickyBar product={product} />
-
-      <style>{`
-        @media (max-width: 768px) {
-          .container-outsix > [style*="grid-template-columns: 1fr 1fr"] {
-            grid-template-columns: 1fr !important;
-            gap: 32px !important;
-          }
-          section[aria-labelledby="related-heading"] .container-outsix > div {
-            grid-template-columns: repeat(2, 1fr) !important;
-          }
-        }
-      `}</style>
     </div>
   );
 }
@@ -725,11 +705,6 @@ function MobileStickyBar({ product }: { product: Product }) {
         )}
       </AnimatePresence>
 
-      <style>{`
-        @media (min-width: 769px) {
-          .visible-mobile { display: none !important; }
-        }
-      `}</style>
     </div>
   );
 }

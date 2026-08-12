@@ -23,12 +23,9 @@ export default function CollectionsPage() {
         {COLLECTIONS.slice(0, 3).map((col, i) => (
           <div
             key={col.id}
-            style={{
-              display: 'grid',
-              gridTemplateColumns: i % 2 === 0 ? '3fr 2fr' : '2fr 3fr',
-              minHeight: '60vh',
-              borderBottom: '1px solid var(--border)',
-            }}
+            className={`min-h-[60vh] border-b border-[var(--border)] ${
+              i % 2 === 0 ? 'grid grid-cols-1 md:grid-cols-[3fr_2fr]' : 'grid grid-cols-1 md:grid-cols-[2fr_3fr]'
+            }`}
           >
             <div
               style={{
@@ -84,11 +81,6 @@ export default function CollectionsPage() {
         ))}
       </div>
 
-      <style>{`
-        @media (max-width: 768px) {
-          div > div > div[style*="3fr"] { grid-template-columns: 1fr !important; }
-        }
-      `}</style>
     </div>
   );
 }
