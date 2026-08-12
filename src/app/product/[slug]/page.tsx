@@ -20,6 +20,14 @@ export default function ProductPage() {
   const storeProducts = useProductStore((s) => s.products);
   const product = storeProducts.find((p) => p.slug === slug || p.id === slug) || getProductBySlug(slug);
 
+  const { addToRecentlyViewed } = useUIStore();
+
+  useEffect(() => {
+    if (product) {
+      addToRecentlyViewed(product);
+    }
+  }, [product, addToRecentlyViewed]);
+
   if (!product && !isLoaded) {
     return (
       <div style={{ paddingTop: '120px', minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -36,11 +44,6 @@ export default function ProductPage() {
   }
 
   const related = getRelatedProducts(product, 4);
-  const { addToRecentlyViewed } = useUIStore();
-
-  useEffect(() => {
-    addToRecentlyViewed(product);
-  }, [product, addToRecentlyViewed]);
 
   return (
     <div style={{ paddingTop: '72px' }}>
