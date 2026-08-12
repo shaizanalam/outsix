@@ -8,7 +8,7 @@ import { useCartStore } from '@/store/cart';
 import { useWishlistStore } from '@/store/wishlist';
 import { useUIStore } from '@/store/ui';
 
-import logoImg from '../../../logo.jpeg';
+import { Logo } from '@/components/ui/Logo';
 
 const NAV_LINKS = [
   { href: '/shop', label: 'SHOP' },
@@ -64,30 +64,7 @@ export function Header() {
         }}
       >
         {/* LOGO */}
-        <Link
-          href="/"
-          aria-label="OUTSIX Home"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            height: scrolled ? '36px' : '44px',
-            textDecoration: 'none',
-            flexShrink: 0,
-            transition: 'height var(--transition-base)',
-          }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={logoImg.src}
-            alt="OUTSIX"
-            style={{
-              height: '100%',
-              width: 'auto',
-              objectFit: 'contain',
-              mixBlendMode: 'screen',
-            }}
-          />
-        </Link>
+        <Logo height={scrolled ? 34 : 44} />
 
         {/* DESKTOP NAV */}
         <nav

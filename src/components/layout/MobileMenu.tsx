@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { X, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUIStore } from '@/store/ui';
-import logoImg from '../../../logo.jpeg';
+import { Logo } from '@/components/ui/Logo';
 
 const MENU_SECTIONS = [
   {
@@ -63,24 +63,7 @@ export function MobileMenu() {
               borderBottom: '1px solid var(--border)',
             }}
           >
-            <Link
-              href="/"
-              onClick={closeMobileMenu}
-              aria-label="OUTSIX Home"
-              style={{ display: 'inline-flex', alignItems: 'center', height: '36px' }}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={logoImg.src}
-                alt="OUTSIX"
-                style={{
-                  height: '100%',
-                  width: 'auto',
-                  objectFit: 'contain',
-                  mixBlendMode: 'screen',
-                }}
-              />
-            </Link>
+            <Logo height={34} onClick={closeMobileMenu} />
             <button
               onClick={closeMobileMenu}
               aria-label="Close menu"
