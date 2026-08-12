@@ -1,27 +1,21 @@
+'use client';
+
+import { use } from 'react';
 import { notFound } from 'next/navigation';
-import type { Metadata } from 'next';
-import { getProductsByCollection, COLLECTIONS } from '@/data/products';
+import { COLLECTIONS } from '@/data/products';
 import { ProductGrid } from '@/components/product/ProductGrid';
+import { useProductStore } from '@/store/products';
 
 type Props = { params: Promise<{ slug: string }> };
 
-export async function generateStaticParams() {
-  return COLLECTIONS.map((c) => ({ slug: c.slug }));
-}
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
+export default function CollectionPage({ params }: Props) {
+  const { slug } = use(params);
   const col = COLLECTIONS.find((c) => c.slug === slug);
-  if (!col) return { title: 'Not Found' };
-  return { title: `${col.name} — OUTSIX`, description: col.description };
-}
+  const storeProducts = useProductStore((s) => s.products);
 
-export default async function CollectionPage({ params }: Props) {
-  const { slug } = await params;
-  const col = COLLECTIONS.find((c) => c.slug === slug);
   if (!col) notFound();
 
-  const products = getProductsByCollection(slug);
+  const products = storeProducts.filter((p) => p.collection === slug);
 
   return (
     <div style={{ paddingTop: '72px', minHeight: '100vh' }}>

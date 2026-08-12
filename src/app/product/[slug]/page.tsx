@@ -16,9 +16,24 @@ import { useProductStore } from '@/store/products';
 export default function ProductPage() {
   const routeParams = useParams();
   const slug = typeof routeParams?.slug === 'string' ? routeParams.slug : Array.isArray(routeParams?.slug) ? routeParams.slug[0] : '';
+  const isLoaded = useProductStore((s) => s.isLoaded);
   const storeProducts = useProductStore((s) => s.products);
   const product = storeProducts.find((p) => p.slug === slug || p.id === slug) || getProductBySlug(slug);
-  if (!product) notFound();
+
+  if (!product && !isLoaded) {
+    return (
+      <div style={{ paddingTop: '120px', minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <p className="font-editorial" style={{ fontSize: '11px', color: 'var(--text-muted)', letterSpacing: '0.14em' }}>
+          LOADING PRODUCT DETAILS...
+        </p>
+      </div>
+    );
+  }
+
+  if (!product) {
+    notFound();
+    return null;
+  }
 
   const related = getRelatedProducts(product, 4);
   const { addToRecentlyViewed } = useUIStore();
