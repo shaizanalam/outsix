@@ -11,7 +11,7 @@ import { useProductStore } from '@/store/products';
 
 export default function HomePage() {
   const storeProducts = useProductStore((s) => s.products);
-  const productsList = storeProducts && storeProducts.length > 0 ? storeProducts : PRODUCTS;
+  const productsList = storeProducts || [];
 
   const newDropProducts = productsList.filter((p) => p.collection === 'drop-01' || p.category === 'TEES').slice(0, 6);
   const bestSellers = productsList.filter((p) => p.badge === 'BESTSELLER' || p.featured || p.stock > 0).slice(0, 4);

@@ -9,6 +9,8 @@ import {
   deleteProductFromSupabase,
 } from '@/lib/supabase/products';
 
+import { isSupabaseConfigured } from '@/lib/supabase/client';
+
 type ProductState = {
   products: Product[];
   isLoaded: boolean;
@@ -24,7 +26,7 @@ type ProductState = {
 export const useProductStore = create<ProductState>()(
   persist(
     (set, get) => ({
-      products: PRODUCTS,
+      products: isSupabaseConfigured ? [] : PRODUCTS,
       isLoaded: false,
 
       loadProducts: async () => {

@@ -423,9 +423,9 @@ export const CATEGORIES: ProductCategory[] = ['TEES', 'HOODIES', 'BOTTOMS', 'ACC
 export function getLiveProducts(): Product[] {
   if (typeof window !== 'undefined') {
     try {
-      const { useAdminStore } = require('@/store/admin');
-      const stateProducts = useAdminStore.getState().products;
-      if (stateProducts && stateProducts.length > 0) {
+      const { useProductStore } = require('@/store/products');
+      const stateProducts = useProductStore.getState().products;
+      if (Array.isArray(stateProducts)) {
         return stateProducts;
       }
     } catch (e) {
