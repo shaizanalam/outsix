@@ -18,6 +18,7 @@ import {
   Upload,
 } from 'lucide-react';
 import { useAdminStore, type AdminOrder } from '@/store/admin';
+import { useProductStore } from '@/store/products';
 import type { Product, ProductCategory, ProductSize } from '@/data/products';
 import { useUIStore } from '@/store/ui';
 import { Logo } from '@/components/ui/Logo';
@@ -30,17 +31,16 @@ export default function AdminPage() {
   const [categoryFilter, setCategoryFilter] = useState<string>('ALL');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
+  const { orders, updateOrderStatus } = useAdminStore();
   const {
     products,
-    orders,
     updateStock,
     updatePrice,
     toggleSizeAvailability,
     addProduct,
     deleteProduct,
-    updateOrderStatus,
     restockAllLowStock,
-  } = useAdminStore();
+  } = useProductStore();
 
   const { addToast } = useUIStore();
 

@@ -418,13 +418,12 @@ export const PRODUCTS: Product[] = [
   },
 ];
 
-import { useAdminStore } from '@/store/admin';
-
 export const CATEGORIES: ProductCategory[] = ['TEES', 'HOODIES', 'BOTTOMS', 'ACCESSORIES', 'HEADWEAR'];
 
 export function getLiveProducts(): Product[] {
   if (typeof window !== 'undefined') {
     try {
+      const { useAdminStore } = require('@/store/admin');
       const stateProducts = useAdminStore.getState().products;
       if (stateProducts && stateProducts.length > 0) {
         return stateProducts;
