@@ -65,11 +65,21 @@ export function MobileMenu() {
           >
             <Link
               href="/"
-              className="font-display"
-              style={{ fontSize: '20px', letterSpacing: '0.12em', color: 'var(--text-primary)', textDecoration: 'none' }}
               onClick={closeMobileMenu}
+              aria-label="OUTSIX Home"
+              style={{ display: 'inline-flex', alignItems: 'center', height: '36px' }}
             >
-              OUTSIX
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={logoImg.src}
+                alt="OUTSIX"
+                style={{
+                  height: '100%',
+                  width: 'auto',
+                  objectFit: 'contain',
+                  mixBlendMode: 'screen',
+                }}
+              />
             </Link>
             <button
               onClick={closeMobileMenu}
