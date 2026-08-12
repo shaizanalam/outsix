@@ -252,7 +252,7 @@ export default function CheckoutPage() {
                       placeholder="First and last name"
                       error={errors.fullName}
                       required
-                      style={{ gridColumn: 'span 1', smGridColumn: 'span 2' }}
+                      className="col-span-1 sm:col-span-2"
                     />
                     <Field
                       label="MOBILE PHONE"
@@ -379,7 +379,7 @@ export default function CheckoutPage() {
                         autoComplete="cc-number"
                         placeholder="4532 0000 0000 0000"
                         maxLength={19}
-                        style={{ gridColumn: 'span 1', smGridColumn: 'span 2' }}
+                        className="col-span-1 sm:col-span-2"
                       />
                       <Field
                         label="EXPIRY DATE"
@@ -406,7 +406,7 @@ export default function CheckoutPage() {
                         onChange={(v) => setCardForm((c) => ({ ...c, cardName: v }))}
                         autoComplete="cc-name"
                         placeholder="Name as on card"
-                        style={{ gridColumn: 'span 1', smGridColumn: 'span 2' }}
+                        className="col-span-1 sm:col-span-2"
                       />
                     </div>
                   )}
@@ -565,7 +565,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 }
 
 function Field({
-  label, value, onChange, type = 'text', inputMode, autoComplete, placeholder, error, required, style: fieldStyle, maxLength,
+  label, value, onChange, type = 'text', inputMode, autoComplete, placeholder, error, required, style: fieldStyle, className, maxLength,
 }: {
   label: string;
   value: string;
@@ -577,10 +577,11 @@ function Field({
   error?: string;
   required?: boolean;
   style?: React.CSSProperties;
+  className?: string;
   maxLength?: number;
 }) {
   return (
-    <div style={fieldStyle}>
+    <div style={fieldStyle} className={className}>
       <p className="font-editorial" style={{ fontSize: '11px', color: 'var(--text-muted)', letterSpacing: '0.1em', marginBottom: '6px' }}>
         {label} {required && '*'}
       </p>
