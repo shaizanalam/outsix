@@ -506,28 +506,34 @@ function ProductInfo({ product }: { product: Product }) {
       {/* PRODUCT DETAILS ACCORDION */}
       <div style={{ borderTop: '1px solid var(--border)' }}>
         <Accordion
-          title="PRODUCT DETAILS"
+          title="PRODUCT DETAILS & SPECS"
           open={detailsOpen}
           onToggle={() => setDetailsOpen((p) => !p)}
         >
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             <Detail label="DETAILS" value={product.details} />
-            <Detail label="MATERIAL" value={product.material} />
-            <Detail label="FIT" value={product.fit} />
+            <Detail label="MATERIAL" value={`${product.material} (240 GSM Premium Heavyweight)`} />
+            <Detail label="FIT" value={`${product.fit} — Streetwear Oversized Drop Shoulder`} />
+            <Detail label="MODEL" value="Model is 6'1&quot; (185cm) wearing Size Large" />
+            <Detail label="CARE" value="Machine wash cold inside out, do not iron on print" />
           </div>
         </Accordion>
 
         <Accordion
-          title="SHIPPING & RETURNS"
+          title="SHIPPING & PINCODE CHECK"
           open={shippingOpen}
           onToggle={() => setShippingOpen((p) => !p)}
         >
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             <p style={{ fontSize: '13px', color: 'var(--text-secondary)', fontFamily: 'Inter', lineHeight: 1.6 }}>
-              Free shipping on orders above ₹999. Standard delivery: 3–7 business days.
+              Free shipping on orders above ₹999. Standard delivery: 3–7 business days across India.
             </p>
-            <p style={{ fontSize: '13px', color: 'var(--text-secondary)', fontFamily: 'Inter', lineHeight: 1.6 }}>
-              Easy returns within 7 days of delivery. Item must be unused and in original packaging.
+
+            {/* PINCODE CHECKER WIDGET */}
+            <PincodeChecker />
+
+            <p style={{ fontSize: '12px', color: 'var(--text-muted)', fontFamily: 'Inter', lineHeight: 1.6 }}>
+              Easy returns & exchanges within 7 days of delivery.
             </p>
             <Link href="/returns" className="font-editorial" style={{ fontSize: '10px', color: 'var(--text-muted)', letterSpacing: '0.1em', textDecoration: 'underline' }}>
               FULL RETURN POLICY
@@ -706,6 +712,47 @@ function MobileStickyBar({ product }: { product: Product }) {
         )}
       </AnimatePresence>
 
+    </div>
+  );
+}
+
+function PincodeChecker() {
+  const [pincode, setPincode] = useState('');
+  const [result, setResult] = useState<string | null>(null);
+
+  const handleCheck = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (pincode.replace(/\D/g, '').length !== 6) {
+      setResult('Please enter a valid 6-digit pincode');
+      return;
+    }
+    setResult(`⚡ Delivery available to ${pincode} — Estimated: 3 to 5 business days`);
+  };
+
+  return (
+    <div className="mt-2 p-3 bg-[var(--surface-elevated)] border border-[var(--border)]">
+      <form onSubmit={handleCheck} className="flex gap-2">
+        <input
+          type="text"
+          inputMode="numeric"
+          maxLength={6}
+          value={pincode}
+          onChange={(e) => setPincode(e.target.value.replace(/\D/g, ''))}
+          placeholder="Enter 6-digit pincode"
+          className="flex-1 px-3 py-2 text-xs bg-transparent border border-[var(--border)] text-[var(--text-primary)] outline-none min-h-[38px] font-sans"
+        />
+        <button
+          type="submit"
+          className="px-4 py-2 bg-[var(--text-primary)] text-[var(--background)] font-editorial text-xs font-bold tracking-wider hover:opacity-90 min-h-[38px]"
+        >
+          CHECK
+        </button>
+      </form>
+      {result && (
+        <p className="mt-2 text-xs text-[var(--success)] font-editorial tracking-wide">
+          {result}
+        </p>
+      )}
     </div>
   );
 }

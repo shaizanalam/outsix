@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, ChevronDown } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useRef, useState } from 'react';
 import { AnnouncementTicker } from '@/components/layout/AnnouncementTicker';
@@ -312,7 +312,20 @@ function HeroSection() {
         </motion.div>
       </div>
 
-      {/* SCROLL INDICATOR */}
+      {/* MOBILE HERO SHOWCASE GRAPHIC */}
+      <div
+        className="block md:hidden absolute right-[-20%] top-1/2 -translate-y-1/2 w-[70vw] max-w-[300px] pointer-events-none opacity-30 z-1"
+        aria-hidden="true"
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/bgrem1.png"
+          alt=""
+          className="w-full h-auto object-contain -rotate-6 drop-shadow-[0_20px_30px_rgba(0,0,0,0.9)]"
+        />
+      </div>
+
+      {/* SCROLL INDICATOR — DESKTOP */}
       <motion.div
         animate={{ y: [0, 8, 0] }}
         transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
@@ -332,6 +345,16 @@ function HeroSection() {
         <span className="font-editorial" style={{ fontSize: '9px', color: 'var(--text-muted)', letterSpacing: '0.14em', writingMode: 'vertical-lr' }}>
           SCROLL
         </span>
+      </motion.div>
+
+      {/* SCROLL CUE — MOBILE ANIMATED CHEVRON */}
+      <motion.div
+        animate={{ y: [0, 6, 0] }}
+        transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
+        className="block md:hidden absolute bottom-4 left-1/2 -translate-x-1/2 z-10 text-[var(--text-muted)] opacity-70"
+        aria-hidden="true"
+      >
+        <ChevronDown size={20} />
       </motion.div>
     </section>
   );
