@@ -66,15 +66,7 @@ function HeroSection() {
     <section
       ref={ref}
       onMouseMove={handleMouseMove}
-      style={{
-        position: 'relative',
-        height: '100svh',
-        minHeight: '600px',
-        backgroundColor: 'var(--background)',
-        display: 'flex',
-        alignItems: 'flex-end',
-        overflow: 'hidden',
-      }}
+      className="relative min-h-[100svh] min-h-[550px] bg-[var(--background)] flex items-center md:items-end overflow-hidden pt-16 md:pt-0"
       aria-label="Hero"
     >
       {/* CLEAN PRODUCT SHOWCASE — 2 STAGGERED T-SHIRTS WITH UNIFORM ROTATION & SOFT DROP SHADOW */}
@@ -266,16 +258,7 @@ function HeroSection() {
 
       {/* CONTENT */}
       <div
-        className="container-outsix"
-        style={{
-          position: 'relative',
-          zIndex: 2,
-          paddingBottom: 'clamp(48px, 8vh, 96px)',
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '24px',
-        }}
+        className="container-outsix relative z-[2] w-full flex flex-col gap-6 py-12 md:py-0 md:pb-[clamp(48px,8vh,96px)]"
       >
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -342,6 +325,7 @@ function HeroSection() {
           alignItems: 'center',
           gap: '8px',
         }}
+        className="hidden-mobile"
         aria-hidden="true"
       >
         <div style={{ width: '1px', height: '40px', backgroundColor: 'var(--border-strong)' }} />

@@ -389,14 +389,18 @@ function FilterPill({ label, active, onClick }: { label: string; active: boolean
       onClick={onClick}
       className="font-editorial"
       style={{
-        padding: '6px 12px',
+        padding: '10px 16px',
+        minHeight: '44px',
         border: '1px solid',
         borderColor: active ? 'var(--text-primary)' : 'var(--border)',
         backgroundColor: active ? 'var(--text-primary)' : 'transparent',
         color: active ? 'var(--background)' : 'var(--text-secondary)',
-        fontSize: '10px',
+        fontSize: '11px',
         letterSpacing: '0.1em',
-        cursor: 'none',
+        cursor: 'pointer',
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         transition: 'all var(--transition-fast)',
       }}
       aria-pressed={active}

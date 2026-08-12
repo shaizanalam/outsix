@@ -132,17 +132,22 @@ export function ProductCard({ product }: Props) {
           <button
             onClick={handleWishlist}
             aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+            className="opacity-100 md:opacity-0 md:group-hover:opacity-100"
             style={{
               position: 'absolute',
-              top: '12px',
-              right: '12px',
-              background: 'none',
+              top: '10px',
+              right: '10px',
+              background: 'rgba(0,0,0,0.4)',
+              backdropFilter: 'blur(4px)',
               border: 'none',
-              cursor: 'none',
-              padding: '6px',
-              opacity: hovered || wishlisted ? 1 : 0,
+              cursor: 'pointer',
+              padding: '8px',
+              borderRadius: '50%',
               transition: 'opacity var(--transition-fast)',
               display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 10,
             }}
           >
             <motion.div
@@ -150,8 +155,8 @@ export function ProductCard({ product }: Props) {
               transition={{ duration: 0.25 }}
             >
               <Heart
-                size={18}
-                strokeWidth={1.5}
+                size={16}
+                strokeWidth={1.8}
                 fill={wishlisted ? 'var(--text-primary)' : 'none'}
                 color={wishlisted ? 'var(--text-primary)' : 'var(--white)'}
               />
@@ -160,7 +165,7 @@ export function ProductCard({ product }: Props) {
 
           {/* QUICK ADD */}
           <AnimatePresence>
-            {hovered && !soldOut && (
+            {(hovered || quickAddOpen) && !soldOut && (
               <motion.div
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -171,9 +176,10 @@ export function ProductCard({ product }: Props) {
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  backgroundColor: quickAddOpen ? 'var(--surface-elevated)' : 'rgba(7,7,7,0.85)',
+                  backgroundColor: quickAddOpen ? 'var(--surface-elevated)' : 'rgba(7,7,7,0.9)',
                   backdropFilter: 'blur(8px)',
-                  padding: '12px',
+                  padding: '10px 12px',
+                  zIndex: 10,
                 }}
               >
                 {!quickAddOpen ? (
@@ -186,12 +192,12 @@ export function ProductCard({ product }: Props) {
                       border: '1px solid var(--border-strong)',
                       color: 'var(--text-primary)',
                       padding: '10px',
-                      cursor: 'none',
+                      cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       gap: '8px',
-                      fontSize: '10px',
+                      fontSize: '11px',
                       letterSpacing: '0.12em',
                       fontFamily: 'Barlow Condensed, sans-serif',
                       fontWeight: 700,
@@ -220,8 +226,8 @@ export function ProductCard({ product }: Props) {
                           onClick={() => available && handleQuickAdd(size)}
                           disabled={!available}
                           style={{
-                            padding: '6px 10px',
-                            fontSize: '10px',
+                            padding: '8px 12px',
+                            fontSize: '11px',
                             letterSpacing: '0.08em',
                             fontFamily: 'Barlow Condensed, sans-serif',
                             fontWeight: 700,
@@ -229,8 +235,9 @@ export function ProductCard({ product }: Props) {
                             borderColor: available ? 'var(--border-strong)' : 'var(--border)',
                             backgroundColor: 'transparent',
                             color: available ? 'var(--text-primary)' : 'var(--text-muted)',
-                            cursor: available ? 'none' : 'not-allowed',
+                            cursor: available ? 'pointer' : 'not-allowed',
                             opacity: available ? 1 : 0.4,
+                            minHeight: '36px',
                             transition: 'border-color var(--transition-fast), background var(--transition-fast)',
                           }}
                           onMouseEnter={(e) => available && (e.currentTarget.style.backgroundColor = 'var(--text-primary)', e.currentTarget.style.color = 'var(--background)')}
