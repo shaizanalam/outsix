@@ -1,22 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import {
-  Package,
-  ShoppingCart,
-  TrendingUp,
-  AlertTriangle,
-  Plus,
-  Search,
-  Check,
-  RefreshCcw,
-  Trash2,
-  ExternalLink,
-  X,
-  LayoutDashboard,
-  Upload,
-} from 'lucide-react';
 import { useAdminStore, type AdminOrder } from '@/store/admin';
 import { useProductStore } from '@/store/products';
 import type { Product, ProductCategory, ProductSize } from '@/data/products';
